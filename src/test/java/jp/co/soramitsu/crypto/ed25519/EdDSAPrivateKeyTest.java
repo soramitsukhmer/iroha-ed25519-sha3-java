@@ -21,7 +21,6 @@ import org.junit.Test;
 
 /**
  * @author str4d
- *
  */
 public class EdDSAPrivateKeyTest {
 
@@ -29,12 +28,12 @@ public class EdDSAPrivateKeyTest {
    * The example private key MC4CAQAwBQYDK2VwBCIEINTuctv5E1hK1bbY8fdp+K06/nwoy/HU++CXqI9EdVhC
    * from https://tools.ietf.org/html/draft-ietf-curdle-pkix-04#section-10.3
    */
-  static final byte[] TEST_PRIVKEY = DatatypeConverter.parseHexBinary(
+  private static final byte[] TEST_PRIVKEY = DatatypeConverter.parseHexBinary(
       "302e020100300506032b657004220420d4ee72dbf913584ad5b6d8f1f769f8ad3afe7c28cbf1d4fbe097a88f44755842");
 
-  static final byte[] TEST_PRIVKEY_NULL_PARAMS = DatatypeConverter.parseHexBinary(
+  private static final byte[] TEST_PRIVKEY_NULL_PARAMS = DatatypeConverter.parseHexBinary(
       "3030020100300706032b6570050004220420d4ee72dbf913584ad5b6d8f1f769f8ad3afe7c28cbf1d4fbe097a88f44755842");
-  static final byte[] TEST_PRIVKEY_OLD = DatatypeConverter.parseHexBinary(
+  private static final byte[] TEST_PRIVKEY_OLD = DatatypeConverter.parseHexBinary(
       "302f020100300806032b65640a01010420d4ee72dbf913584ad5b6d8f1f769f8ad3afe7c28cbf1d4fbe097a88f44755842");
 
   @Test

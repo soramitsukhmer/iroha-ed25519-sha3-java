@@ -18,7 +18,6 @@ import java.math.BigInteger;
 import javax.xml.bind.DatatypeConverter;
 import jp.co.soramitsu.crypto.ed25519.math.MathUtils;
 import org.hamcrest.core.IsEqual;
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -53,11 +52,11 @@ public class Ed25519ScalarOpsTest {
       final byte[] reduced2 = MathUtils.reduceModGroupOrder(bytes);
 
       // Assert:
-      Assert.assertThat(MathUtils.toBigInteger(reduced1).compareTo(MathUtils.getGroupOrder()),
+      assertThat(MathUtils.toBigInteger(reduced1).compareTo(MathUtils.getGroupOrder()),
           IsEqual.equalTo(-1));
-      Assert.assertThat(MathUtils.toBigInteger(reduced1).compareTo(new BigInteger("-1")),
+      assertThat(MathUtils.toBigInteger(reduced1).compareTo(new BigInteger("-1")),
           IsEqual.equalTo(1));
-      Assert.assertThat(reduced1, IsEqual.equalTo(reduced2));
+      assertThat(reduced1, IsEqual.equalTo(reduced2));
     }
   }
 
@@ -91,11 +90,11 @@ public class Ed25519ScalarOpsTest {
       final byte[] result2 = MathUtils.multiplyAndAddModGroupOrder(bytes1, bytes2, bytes3);
 
       // Assert:
-      Assert.assertThat(MathUtils.toBigInteger(result1).compareTo(MathUtils.getGroupOrder()),
+      assertThat(MathUtils.toBigInteger(result1).compareTo(MathUtils.getGroupOrder()),
           IsEqual.equalTo(-1));
-      Assert.assertThat(MathUtils.toBigInteger(result1).compareTo(new BigInteger("-1")),
+      assertThat(MathUtils.toBigInteger(result1).compareTo(new BigInteger("-1")),
           IsEqual.equalTo(1));
-      Assert.assertThat(result1, IsEqual.equalTo(result2));
+      assertThat(result1, IsEqual.equalTo(result2));
     }
   }
 }

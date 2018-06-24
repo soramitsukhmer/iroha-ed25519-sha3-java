@@ -22,25 +22,25 @@ import org.junit.rules.ExpectedException;
 
 /**
  * @author str4d
- *
  */
 public class EdDSAPrivateKeySpecTest {
 
-  static final byte[] ZERO_SEED = DatatypeConverter
+  private static final byte[] ZERO_SEED = DatatypeConverter
       .parseHexBinary("0000000000000000000000000000000000000000000000000000000000000000");
-  static final byte[] ZERO_H = DatatypeConverter.parseHexBinary(
+  private static final byte[] ZERO_H = DatatypeConverter.parseHexBinary(
       "a856c35cab5063b9e7ea568314ec81c40ba577aae630de902004009e88f18d657bbdfdaaa0fc189c66c8d853248b6b118844d53f7d0ba11de0f3bfaf4cdd9b3f");
-  static final byte[] ZERO_PK = DatatypeConverter
+  private static final byte[] ZERO_PK = DatatypeConverter
       .parseHexBinary("43eeb17f0bab10dd51ab70983c25200a1742d31b3b7b54c38c34d7b827b26eed");
 
-  static final EdDSANamedCurveSpec ed25519 = EdDSANamedCurveTable
+  private static final EdDSANamedCurveSpec ed25519 = EdDSANamedCurveTable
       .getByName(EdDSANamedCurveTable.ED_25519);
 
   @Rule
   public ExpectedException exception = ExpectedException.none();
 
   /**
-   * Test method for {@link jp.co.soramitsu.crypto.ed25519.spec.EdDSAPrivateKeySpec#EdDSAPrivateKeySpec(byte[], jp.co.soramitsu.crypto.ed25519.spec.EdDSAParameterSpec)}.
+   * Test method for {@link jp.co.soramitsu.crypto.ed25519.spec.EdDSAPrivateKeySpec#EdDSAPrivateKeySpec(byte[],
+   * jp.co.soramitsu.crypto.ed25519.spec.EdDSAParameterSpec)}.
    */
   @Test
   public void testEdDSAPrivateKeySpecFromSeed() {
@@ -58,7 +58,8 @@ public class EdDSAPrivateKeySpecTest {
   }
 
   /**
-   * Test method for {@link jp.co.soramitsu.crypto.ed25519.spec.EdDSAPrivateKeySpec#EdDSAPrivateKeySpec(jp.co.soramitsu.crypto.ed25519.spec.EdDSAParameterSpec, byte[])}.
+   * Test method for {@link jp.co.soramitsu.crypto.ed25519.spec.EdDSAPrivateKeySpec#EdDSAPrivateKeySpec(jp.co.soramitsu.crypto.ed25519.spec.EdDSAParameterSpec,
+   * byte[])}.
    */
   @Test
   public void testEdDSAPrivateKeySpecFromH() {

@@ -35,12 +35,12 @@ import org.junit.rules.ExpectedException;
  */
 public class EdDSAEngineTest {
 
-  static final byte[] TEST_SEED = DatatypeConverter
+  private static final byte[] TEST_SEED = DatatypeConverter
       .parseHexBinary("0000000000000000000000000000000000000000000000000000000000000000");
-  static final byte[] TEST_PK = DatatypeConverter
+  private static final byte[] TEST_PK = DatatypeConverter
       .parseHexBinary("43eeb17f0bab10dd51ab70983c25200a1742d31b3b7b54c38c34d7b827b26eed");
-  static final byte[] TEST_MSG = "This is a secret message".getBytes(Charset.forName("UTF-8"));
-  static final byte[] TEST_MSG_SIG = DatatypeConverter.parseHexBinary(
+  private static final byte[] TEST_MSG = "This is a secret message".getBytes(Charset.forName("UTF-8"));
+  private static final byte[] TEST_MSG_SIG = DatatypeConverter.parseHexBinary(
       "fb95fd5387920d177e9281821ceacca377b9e897aa6ddad6a9224b10827fde9105873e89e5cf067a3f42cfe7b8fb3f9b1fe3d8c185cfbdc850f45e823e038300");
 
   @Rule

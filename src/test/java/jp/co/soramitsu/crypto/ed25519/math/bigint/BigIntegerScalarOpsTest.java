@@ -24,13 +24,12 @@ import org.junit.Test;
 
 /**
  * @author str4d
- *
  */
 public class BigIntegerScalarOpsTest {
 
-  static final EdDSANamedCurveSpec ed25519 = EdDSANamedCurveTable
+  private static final EdDSANamedCurveSpec ed25519 = EdDSANamedCurveTable
       .getByName(EdDSANamedCurveTable.ED_25519);
-  static final Field ed25519Field = ed25519.getCurve().getField();
+  private static final Field ed25519Field = ed25519.getCurve().getField();
 
   /**
    * Test method for {@link jp.co.soramitsu.crypto.ed25519.math.bigint.BigIntegerScalarOps#reduce(byte[])}.
@@ -54,7 +53,8 @@ public class BigIntegerScalarOpsTest {
   }
 
   /**
-   * Test method for {@link jp.co.soramitsu.crypto.ed25519.math.bigint.BigIntegerScalarOps#multiplyAndAdd(byte[], byte[], byte[])}.
+   * Test method for {@link jp.co.soramitsu.crypto.ed25519.math.bigint.BigIntegerScalarOps#multiplyAndAdd(byte[],
+   * byte[], byte[])}.
    */
   @Test
   public void testMultiplyAndAdd() {

@@ -26,26 +26,27 @@ import org.junit.Test;
 
 /**
  * @author str4d
- *
  */
 public class BigIntegerFieldElementTest extends AbstractFieldElementTest {
 
-  static final byte[] BYTES_ZERO = DatatypeConverter
+  private static final byte[] BYTES_ZERO = DatatypeConverter
       .parseHexBinary("0000000000000000000000000000000000000000000000000000000000000000");
-  static final byte[] BYTES_ONE = DatatypeConverter
+  private static final byte[] BYTES_ONE = DatatypeConverter
       .parseHexBinary("0100000000000000000000000000000000000000000000000000000000000000");
-  static final byte[] BYTES_TEN = DatatypeConverter
+  private static final byte[] BYTES_TEN = DatatypeConverter
       .parseHexBinary("0a00000000000000000000000000000000000000000000000000000000000000");
 
-  static final Field ed25519Field = new Field(
+  private static final Field ed25519Field = new Field(
       256, // b
       DatatypeConverter
           .parseHexBinary("edffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f"), // q
       new BigIntegerLittleEndianEncoding());
 
-  static final FieldElement ZERO = new BigIntegerFieldElement(ed25519Field, BigInteger.ZERO);
-  static final FieldElement ONE = new BigIntegerFieldElement(ed25519Field, BigInteger.ONE);
-  static final FieldElement TWO = new BigIntegerFieldElement(ed25519Field, BigInteger.valueOf(2));
+  private static final FieldElement ZERO = new BigIntegerFieldElement(ed25519Field,
+      BigInteger.ZERO);
+  private static final FieldElement ONE = new BigIntegerFieldElement(ed25519Field, BigInteger.ONE);
+  private static final FieldElement TWO = new BigIntegerFieldElement(ed25519Field,
+      BigInteger.valueOf(2));
 
   protected FieldElement getRandomFieldElement() {
     BigInteger r;
