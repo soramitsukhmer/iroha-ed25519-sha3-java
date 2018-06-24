@@ -11,13 +11,14 @@
  */
 package jp.co.soramitsu.crypto.ed25519;
 
-import org.hamcrest.core.IsEqual;
-import org.junit.*;
-
-import java.security.SecureRandom;
-
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
+
+import java.security.SecureRandom;
+import javax.xml.bind.DatatypeConverter;
+import org.hamcrest.core.IsEqual;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * @author str4d
@@ -118,15 +119,15 @@ public class UtilsTest {
 
     @Test
     public void hexToBytesReturnsCorrectByteArray() {
-        Assert.assertThat(Utils.hexToBytes(hex1), IsEqual.equalTo(bytes1));
-        Assert.assertThat(Utils.hexToBytes(hex2), IsEqual.equalTo(bytes2));
-        Assert.assertThat(Utils.hexToBytes(hex3), IsEqual.equalTo(bytes3));
+        Assert.assertThat(DatatypeConverter.parseHexBinary(hex1), IsEqual.equalTo(bytes1));
+        Assert.assertThat(DatatypeConverter.parseHexBinary(hex2), IsEqual.equalTo(bytes2));
+        Assert.assertThat(DatatypeConverter.parseHexBinary(hex3), IsEqual.equalTo(bytes3));
     }
 
     @Test
     public void bytesToHexReturnsCorrectHexString() {
-        Assert.assertThat(Utils.bytesToHex(bytes1), IsEqual.equalTo(hex1));
-        Assert.assertThat(Utils.bytesToHex(bytes2), IsEqual.equalTo(hex2));
-        Assert.assertThat(Utils.bytesToHex(bytes3), IsEqual.equalTo(hex3));
+        Assert.assertThat(DatatypeConverter.printHexBinary(bytes1), IsEqual.equalTo(hex1));
+        Assert.assertThat(DatatypeConverter.printHexBinary(bytes2), IsEqual.equalTo(hex2));
+        Assert.assertThat(DatatypeConverter.printHexBinary(bytes3), IsEqual.equalTo(hex3));
     }
 }

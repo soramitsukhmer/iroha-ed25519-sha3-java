@@ -7,21 +7,21 @@
  *
  * You should have received a copy of the CC0 legalcode along with this
  * work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
- *
  */
 package jp.co.soramitsu.crypto.ed25519.math.bigint;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
+import static org.junit.Assert.assertThat;
 
 import java.math.BigInteger;
 import java.util.Random;
-
-import jp.co.soramitsu.crypto.ed25519.Utils;
+import javax.xml.bind.DatatypeConverter;
+import jp.co.soramitsu.crypto.ed25519.math.AbstractFieldElementTest;
 import jp.co.soramitsu.crypto.ed25519.math.Field;
 import jp.co.soramitsu.crypto.ed25519.math.FieldElement;
 import jp.co.soramitsu.crypto.ed25519.math.MathUtils;
-import jp.co.soramitsu.crypto.ed25519.math.AbstractFieldElementTest;
 import org.junit.Test;
 
 /**
@@ -29,88 +29,95 @@ import org.junit.Test;
  *
  */
 public class BigIntegerFieldElementTest extends AbstractFieldElementTest {
-    static final byte[] BYTES_ZERO = Utils.hexToBytes("0000000000000000000000000000000000000000000000000000000000000000");
-    static final byte[] BYTES_ONE = Utils.hexToBytes("0100000000000000000000000000000000000000000000000000000000000000");
-    static final byte[] BYTES_TEN = Utils.hexToBytes("0a00000000000000000000000000000000000000000000000000000000000000");
 
-    static final Field ed25519Field = new Field(
-            256, // b
-            Utils.hexToBytes("edffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f"), // q
-            new BigIntegerLittleEndianEncoding());
+  static final byte[] BYTES_ZERO = DatatypeConverter
+      .parseHexBinary("0000000000000000000000000000000000000000000000000000000000000000");
+  static final byte[] BYTES_ONE = DatatypeConverter
+      .parseHexBinary("0100000000000000000000000000000000000000000000000000000000000000");
+  static final byte[] BYTES_TEN = DatatypeConverter
+      .parseHexBinary("0a00000000000000000000000000000000000000000000000000000000000000");
 
-    static final FieldElement ZERO = new BigIntegerFieldElement(ed25519Field, BigInteger.ZERO);
-    static final FieldElement ONE = new BigIntegerFieldElement(ed25519Field, BigInteger.ONE);
-    static final FieldElement TWO = new BigIntegerFieldElement(ed25519Field, BigInteger.valueOf(2));
+  static final Field ed25519Field = new Field(
+      256, // b
+      DatatypeConverter
+          .parseHexBinary("edffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f"), // q
+      new BigIntegerLittleEndianEncoding());
 
-    protected FieldElement getRandomFieldElement() {
-        BigInteger r;
-        Random rnd = new Random();
-        do {
-            r = new BigInteger(255, rnd);
-        } while (r.compareTo(getQ()) >= 0);
-        return new BigIntegerFieldElement(ed25519Field, r);
-    }
+  static final FieldElement ZERO = new BigIntegerFieldElement(ed25519Field, BigInteger.ZERO);
+  static final FieldElement ONE = new BigIntegerFieldElement(ed25519Field, BigInteger.ONE);
+  static final FieldElement TWO = new BigIntegerFieldElement(ed25519Field, BigInteger.valueOf(2));
 
-    protected BigInteger toBigInteger(FieldElement f) {
-        return ((BigIntegerFieldElement)f).bi;
-    }
+  protected FieldElement getRandomFieldElement() {
+    BigInteger r;
+    Random rnd = new Random();
+    do {
+      r = new BigInteger(255, rnd);
+    } while (r.compareTo(getQ()) >= 0);
+    return new BigIntegerFieldElement(ed25519Field, r);
+  }
 
-    protected BigInteger getQ() {
-        return MathUtils.getQ();
-    }
+  protected BigInteger toBigInteger(FieldElement f) {
+    return ((BigIntegerFieldElement) f).bi;
+  }
 
-    protected Field getField() {
-        return ed25519Field;
-    }
+  protected BigInteger getQ() {
+    return MathUtils.getQ();
+  }
 
-    /**
-     * Test method for {@link BigIntegerFieldElement#BigIntegerFieldElement(Field, BigInteger)}.
-     */
-    @Test
-    public void testFieldElementBigInteger() {
-        assertThat(new BigIntegerFieldElement(ed25519Field, BigInteger.ZERO).bi, is(BigInteger.ZERO));
-        assertThat(new BigIntegerFieldElement(ed25519Field, BigInteger.ONE).bi, is(BigInteger.ONE));
-        assertThat(new BigIntegerFieldElement(ed25519Field, BigInteger.valueOf(2)).bi, is(BigInteger.valueOf(2)));
-    }
+  protected Field getField() {
+    return ed25519Field;
+  }
 
-    /**
-     * Test method for {@link FieldElement#toByteArray()}.
-     */
-    @Test
-    public void testToByteArray() {
-        byte[] zero = ZERO.toByteArray();
-        assertThat(zero.length, is(equalTo(BYTES_ZERO.length)));
-        assertThat(zero, is(equalTo(BYTES_ZERO)));
+  /**
+   * Test method for {@link BigIntegerFieldElement#BigIntegerFieldElement(Field, BigInteger)}.
+   */
+  @Test
+  public void testFieldElementBigInteger() {
+    assertThat(new BigIntegerFieldElement(ed25519Field, BigInteger.ZERO).bi, is(BigInteger.ZERO));
+    assertThat(new BigIntegerFieldElement(ed25519Field, BigInteger.ONE).bi, is(BigInteger.ONE));
+    assertThat(new BigIntegerFieldElement(ed25519Field, BigInteger.valueOf(2)).bi,
+        is(BigInteger.valueOf(2)));
+  }
 
-        byte[] one = ONE.toByteArray();
-        assertThat(one.length, is(equalTo(BYTES_ONE.length)));
-        assertThat(one, is(equalTo(BYTES_ONE)));
+  /**
+   * Test method for {@link FieldElement#toByteArray()}.
+   */
+  @Test
+  public void testToByteArray() {
+    byte[] zero = ZERO.toByteArray();
+    assertThat(zero.length, is(equalTo(BYTES_ZERO.length)));
+    assertThat(zero, is(equalTo(BYTES_ZERO)));
 
-        byte[] ten = new BigIntegerFieldElement(ed25519Field, BigInteger.TEN).toByteArray();
-        assertThat(ten.length, is(equalTo(BYTES_TEN.length)));
-        assertThat(ten, is(equalTo(BYTES_TEN)));
-    }
+    byte[] one = ONE.toByteArray();
+    assertThat(one.length, is(equalTo(BYTES_ONE.length)));
+    assertThat(one, is(equalTo(BYTES_ONE)));
 
-    // region isNonZero
+    byte[] ten = new BigIntegerFieldElement(ed25519Field, BigInteger.TEN).toByteArray();
+    assertThat(ten.length, is(equalTo(BYTES_TEN.length)));
+    assertThat(ten, is(equalTo(BYTES_TEN)));
+  }
 
-    protected FieldElement getZeroFieldElement() {
-        return ZERO;
-    }
+  // region isNonZero
 
-    protected FieldElement getNonZeroFieldElement() {
-        return TWO;
-    }
+  protected FieldElement getZeroFieldElement() {
+    return ZERO;
+  }
 
-    // endregion
+  protected FieldElement getNonZeroFieldElement() {
+    return TWO;
+  }
 
-    /**
-     * Test method for {@link FieldElement#equals(java.lang.Object)}.
-     */
-    @Test
-    public void testEqualsObject() {
-        assertThat(new BigIntegerFieldElement(ed25519Field, BigInteger.ZERO), is(equalTo(ZERO)));
-        assertThat(new BigIntegerFieldElement(ed25519Field, BigInteger.valueOf(1000)), is(equalTo(new BigIntegerFieldElement(ed25519Field, BigInteger.valueOf(1000)))));
-        assertThat(ONE, is(not(equalTo(TWO))));
-    }
+  // endregion
+
+  /**
+   * Test method for {@link FieldElement#equals(java.lang.Object)}.
+   */
+  @Test
+  public void testEqualsObject() {
+    assertThat(new BigIntegerFieldElement(ed25519Field, BigInteger.ZERO), is(equalTo(ZERO)));
+    assertThat(new BigIntegerFieldElement(ed25519Field, BigInteger.valueOf(1000)),
+        is(equalTo(new BigIntegerFieldElement(ed25519Field, BigInteger.valueOf(1000)))));
+    assertThat(ONE, is(not(equalTo(TWO))));
+  }
 
 }
