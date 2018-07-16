@@ -3,6 +3,7 @@ EdDSA-Java
 
 [![Build Status](https://travis-ci.org/Warchant/ed25519-sha3-java.svg?branch=master)](https://travis-ci.org/Warchant/ed25519-sha3-java)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/fd277321c4664e93a33b6e7d7fce56d2)](https://www.codacy.com/app/Warchant/ed25519-sha3-java?utm_source=github.com&utm_medium=referral&utm_content=Warchant/ed25519-sha3-java&utm_campaign=Badge_Grade)
+[![](https://jitpack.io/v/warchant/ed25519-sha3-java.svg)](https://jitpack.io/#warchant/ed25519-sha3-java)
 
 
 This is an implementation of EdDSA (SHA3) in Java. Structurally, it is based on the ref10 implementation in SUPERCOP
