@@ -66,7 +66,7 @@ import jp.co.soramitsu.crypto.ed25519.math.ScalarOps;
  *
  */
 public final class EdDSAEngine extends Signature {
-    public static final String SIGNATURE_ALGORITHM = "NONEwithEdDSA";
+    public static final String SIGNATURE_ALGORITHM = "EdDSA/SHA3";
 
     private MessageDigest digest;
     private ByteArrayOutputStream baos;
