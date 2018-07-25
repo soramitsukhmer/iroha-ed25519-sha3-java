@@ -36,6 +36,17 @@ The JUnit4 tests require the Hamcrest library `hamcrest-all.jar`.
 
 This code is released to the public domain and can be used for any purpose. See `LICENSE.txt` for details.
 
+Usage Example
+-------------
+
+```java
+Security.addProvider(new EdDSASecurityProvider());
+
+KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EdDSA", "EdDSA");
+KeyFactory keyFac = KeyFactory.getInstance("EdDSA", "EdDSA");
+Signature sgr = Signature.getInstance("EdDSA/SHA3", "EdDSA");
+```
+
 Disclaimer
 ----------
 
