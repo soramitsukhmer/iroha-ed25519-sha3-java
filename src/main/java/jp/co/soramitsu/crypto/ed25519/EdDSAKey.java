@@ -21,7 +21,7 @@ public interface EdDSAKey {
     /**
      * The reported key algorithm for all EdDSA keys
      */
-    String KEY_ALGORITHM = "EdDSA";
+    String KEY_ALGORITHM = "EdDSA/SHA3";
 
     /**
      * @return a parameter specification representing the EdDSA domain
