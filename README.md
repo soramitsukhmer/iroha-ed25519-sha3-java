@@ -42,8 +42,8 @@ Usage Example
 ```java
 Security.addProvider(new EdDSASecurityProvider());
 
-KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EdDSA", "EdDSA");
-KeyFactory keyFac = KeyFactory.getInstance("EdDSA", "EdDSA");
+KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EdDSA/SHA3", "EdDSA");
+KeyFactory keyFac = KeyFactory.getInstance("EdDSA/SHA3", "EdDSA");
 Signature sgr = Signature.getInstance("EdDSA/SHA3", "EdDSA");
 ```
 
