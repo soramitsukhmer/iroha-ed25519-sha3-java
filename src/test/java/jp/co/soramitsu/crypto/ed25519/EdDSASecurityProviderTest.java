@@ -36,8 +36,8 @@ public class EdDSASecurityProviderTest {
     public void canGetInstancesWhenProviderIsPresent() throws Exception {
         Security.addProvider(new EdDSASecurityProvider());
 
-        KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EdDSA", "EdDSA");
-        KeyFactory keyFac = KeyFactory.getInstance("EdDSA", "EdDSA");
+        KeyPairGenerator keyGen = KeyPairGenerator.getInstance(EdDSAKey.KEY_ALGORITHM, "EdDSA");
+        KeyFactory keyFac = KeyFactory.getInstance(EdDSAKey.KEY_ALGORITHM, "EdDSA");
         Signature sgr = Signature.getInstance(EdDSAEngine.SIGNATURE_ALGORITHM, "EdDSA");
 
         Security.removeProvider("EdDSA");
@@ -46,6 +46,6 @@ public class EdDSASecurityProviderTest {
     @Test
     public void cannotGetInstancesWhenProviderIsNotPresent() throws Exception {
         exception.expect(NoSuchProviderException.class);
-        KeyPairGenerator keyGen = KeyPairGenerator.getInstance("EdDSA", "EdDSA");
+        KeyPairGenerator keyGen = KeyPairGenerator.getInstance(EdDSAKey.KEY_ALGORITHM, "EdDSA");
     }
 }
