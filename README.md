@@ -3,6 +3,7 @@ EdDSA-Java
 
 [![Build Status](https://travis-ci.org/Warchant/ed25519-sha3-java.svg?branch=master)](https://travis-ci.org/Warchant/ed25519-sha3-java)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/fd277321c4664e93a33b6e7d7fce56d2)](https://www.codacy.com/app/Warchant/ed25519-sha3-java?utm_source=github.com&utm_medium=referral&utm_content=Warchant/ed25519-sha3-java&utm_campaign=Badge_Grade)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FWarchant%2Fed25519-sha3-java.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FWarchant%2Fed25519-sha3-java?ref=badge_shield)
 [![](https://jitpack.io/v/warchant/ed25519-sha3-java.svg)](https://jitpack.io/#warchant/ed25519-sha3-java)
 
 
@@ -57,3 +58,7 @@ reviewability are very welcome. Additionally:
 - The unit test suite includes tests against
   [the data from the original Python implementation](https://ed25519.cr.yp.to/python/sign.input) modified for use of SHA3-512 [(original)](https://github.com/hyperledger/iroha-ed25519/tree/master/test/ed25519).
 
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FWarchant%2Fed25519-sha3-java.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FWarchant%2Fed25519-sha3-java?ref=badge_large)
