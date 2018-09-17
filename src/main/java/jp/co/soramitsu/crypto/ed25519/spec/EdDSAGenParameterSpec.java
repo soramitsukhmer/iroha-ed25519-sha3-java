@@ -1,13 +1,11 @@
 /**
  * EdDSA-Java by str4d
  *
- * To the extent possible under law, the person who associated CC0 with
- * EdDSA-Java has waived all copyright and related or neighboring rights
- * to EdDSA-Java.
+ * To the extent possible under law, the person who associated CC0 with EdDSA-Java has waived all
+ * copyright and related or neighboring rights to EdDSA-Java.
  *
- * You should have received a copy of the CC0 legalcode along with this
- * work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
- *
+ * You should have received a copy of the CC0 legalcode along with this work. If not, see
+ * <https://creativecommons.org/publicdomain/zero/1.0/>.
  */
 package jp.co.soramitsu.crypto.ed25519.spec;
 
@@ -20,13 +18,14 @@ import java.security.spec.AlgorithmParameterSpec;
  *
  */
 public class EdDSAGenParameterSpec implements AlgorithmParameterSpec {
-    private final String name;
 
-    public EdDSAGenParameterSpec(String stdName) {
-        name = stdName;
-    }
+  private final String name;
 
-    public String getName() {
-        return name;
-    }
+  public EdDSAGenParameterSpec(String stdName) {
+    name = stdName;
+  }
+
+  public String getName() {
+    return name;
+  }
 }

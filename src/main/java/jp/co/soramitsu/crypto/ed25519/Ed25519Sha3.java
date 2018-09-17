@@ -15,11 +15,12 @@ import jp.co.soramitsu.crypto.ed25519.spec.EdDSAPublicKeySpec;
 
 public class Ed25519Sha3 {
 
+  private static final EdDSAParameterSpec spec = EdDSANamedCurveTable.getByName(ED_25519);
+
   static {
     Security.addProvider(new EdDSASecurityProvider());
   }
 
-  private static final EdDSAParameterSpec spec = EdDSANamedCurveTable.getByName(ED_25519);
   private Signature sgr;
   private KeyPairGenerator keyGen;
 
@@ -37,6 +38,37 @@ public class Ed25519Sha3 {
     }
   }
 
+  public static KeyPair keyPairFromBytes(byte[] privateKey, byte[] publicKey) {
+    return new KeyPair(
+        publicKeyFromBytes(publicKey),
+        privateKeyFromBytes(privateKey)
+    );
+  }
+
+  public static PublicKey publicKeyFromBytes(byte[] publicKey) {
+    return new EdDSAPublicKey(new EdDSAPublicKeySpec(publicKey, spec));
+  }
+
+  public static PrivateKey privateKeyFromBytes(byte[] privateKey) {
+    return new EdDSAPrivateKey(new EdDSAPrivateKeySpec(privateKey, spec));
+  }
+
+  public static byte[] publicKeyToBytes(PublicKey pub) {
+    if (!(pub instanceof EdDSAPublicKey)) {
+      throw new IllegalArgumentException("publicKeyToBytes: pub is not instanceof EdDSAPublicKey");
+    }
+
+    return ((EdDSAPublicKey) pub).getAbyte();
+  }
+
+  public static byte[] privateKeyToBytes(PrivateKey priv) {
+    if (!(priv instanceof EdDSAPrivateKey)) {
+      throw new IllegalArgumentException(
+          "privateKeyToBytes: priv is not instanceof EdDSAPrivateKey");
+    }
+
+    return ((EdDSAPrivateKey) priv).getSeed();
+  }
 
   public byte[] rawSign(byte[] data, KeyPair keypair) throws CryptoException {
     try {
@@ -80,38 +112,6 @@ public class Ed25519Sha3 {
     } catch (Exception e) {
       throw new CryptoException(e);
     }
-  }
-
-  public static KeyPair keyPairFromBytes(byte[] privateKey, byte[] publicKey) {
-    return new KeyPair(
-        publicKeyFromBytes(publicKey),
-        privateKeyFromBytes(privateKey)
-    );
-  }
-
-  public static PublicKey publicKeyFromBytes(byte[] publicKey) {
-    return new EdDSAPublicKey(new EdDSAPublicKeySpec(publicKey, spec));
-  }
-
-  public static PrivateKey privateKeyFromBytes(byte[] privateKey) {
-    return new EdDSAPrivateKey(new EdDSAPrivateKeySpec(privateKey, spec));
-  }
-
-  public static byte[] publicKeyToBytes(PublicKey pub) {
-    if (!(pub instanceof EdDSAPublicKey)) {
-      throw new IllegalArgumentException("publicKeyToBytes: pub is not instanceof EdDSAPublicKey");
-    }
-
-    return ((EdDSAPublicKey) pub).getAbyte();
-  }
-
-  public static byte[] privateKeyToBytes(PrivateKey priv) {
-    if (!(priv instanceof EdDSAPrivateKey)) {
-      throw new IllegalArgumentException(
-          "privateKeyToBytes: priv is not instanceof EdDSAPrivateKey");
-    }
-
-    return ((EdDSAPrivateKey) priv).getSeed();
   }
 
   public static class CryptoException extends Exception {

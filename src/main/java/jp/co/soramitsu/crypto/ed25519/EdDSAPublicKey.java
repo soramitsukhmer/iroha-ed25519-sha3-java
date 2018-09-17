@@ -1,13 +1,11 @@
 /**
  * EdDSA-Java by str4d
  *
- * To the extent possible under law, the person who associated CC0 with
- * EdDSA-Java has waived all copyright and related or neighboring rights
- * to EdDSA-Java.
+ * To the extent possible under law, the person who associated CC0 with EdDSA-Java has waived all
+ * copyright and related or neighboring rights to EdDSA-Java.
  *
- * You should have received a copy of the CC0 legalcode along with this
- * work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
- *
+ * You should have received a copy of the CC0 legalcode along with this work. If not, see
+ * <https://creativecommons.org/publicdomain/zero/1.0/>.
  */
 package jp.co.soramitsu.crypto.ed25519;
 
@@ -15,7 +13,6 @@ import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Arrays;
-
 import jp.co.soramitsu.crypto.ed25519.math.GroupElement;
 import jp.co.soramitsu.crypto.ed25519.spec.EdDSANamedCurveTable;
 import jp.co.soramitsu.crypto.ed25519.spec.EdDSAParameterSpec;
@@ -38,45 +35,137 @@ import jp.co.soramitsu.crypto.ed25519.spec.EdDSAPublicKeySpec;
  *
  */
 public class EdDSAPublicKey implements EdDSAKey, PublicKey {
-    private static final long serialVersionUID = 9837459837498475L;
-    private final GroupElement A;
-    private GroupElement Aneg = null;
-    private final byte[] Abyte;
-    private final EdDSAParameterSpec edDsaSpec;
 
-    // OID 1.3.101.xxx
-    private static final int OID_OLD = 100;
-    private static final int OID_ED25519 = 112;
-    private static final int OID_BYTE = 8;
-    private static final int IDLEN_BYTE = 3;
+  private static final long serialVersionUID = 9837459837498475L;
+  // OID 1.3.101.xxx
+  private static final int OID_OLD = 100;
+  private static final int OID_ED25519 = 112;
+  private static final int OID_BYTE = 8;
+  private static final int IDLEN_BYTE = 3;
+  private final GroupElement A;
+  private final byte[] Abyte;
+  private final EdDSAParameterSpec edDsaSpec;
+  private GroupElement Aneg = null;
 
-    public EdDSAPublicKey(EdDSAPublicKeySpec spec) {
-        this.A = spec.getA();
-        this.Abyte = this.A.toByteArray();
-        this.edDsaSpec = spec.getParams();
+  public EdDSAPublicKey(EdDSAPublicKeySpec spec) {
+    this.A = spec.getA();
+    this.Abyte = this.A.toByteArray();
+    this.edDsaSpec = spec.getParams();
+  }
+
+  public EdDSAPublicKey(X509EncodedKeySpec spec) throws InvalidKeySpecException {
+    this(new EdDSAPublicKeySpec(decode(spec.getEncoded()),
+        EdDSANamedCurveTable.ED_25519_CURVE_SPEC));
+  }
+
+  /**
+   * Extracts the public key bytes from the provided encoding.
+   *<p>
+   * This will decode data conforming to the current spec at
+   * https://tools.ietf.org/html/draft-ietf-curdle-pkix-04
+   * or the old spec at
+   * https://tools.ietf.org/html/draft-josefsson-pkix-eddsa-04.
+   *</p><p>
+   * Contrary to draft-ietf-curdle-pkix-04, it WILL accept a parameter value
+   * of NULL, as it is required for interoperability with the default Java
+   * keystore. Other implementations MUST NOT copy this behaviour from here
+   * unless they also need to read keys from the default Java keystore.
+   *</p><p>
+   * This is really dumb for now. It does not use a general-purpose ASN.1 decoder.
+   * See also getEncoded().
+   *</p>
+   *
+   * @return 32 bytes for Ed25519, throws for other curves
+   */
+  private static byte[] decode(byte[] d) throws InvalidKeySpecException {
+    try {
+      //
+      // Setup and OID check
+      //
+      int totlen = 44;
+      int idlen = 5;
+      int doid = d[OID_BYTE];
+      if (doid == OID_OLD) {
+        totlen = 47;
+        idlen = 8;
+      } else if (doid == OID_ED25519) {
+        // Detect parameter value of NULL
+        if (d[IDLEN_BYTE] == 7) {
+          totlen = 46;
+          idlen = 7;
+        }
+      } else {
+        throw new InvalidKeySpecException("unsupported key spec");
+      }
+
+      //
+      // Pre-decoding check
+      //
+      if (d.length != totlen) {
+        throw new InvalidKeySpecException("invalid key spec length");
+      }
+
+      //
+      // Decoding
+      //
+      int idx = 0;
+      if (d[idx++] != 0x30 ||
+          d[idx++] != (totlen - 2) ||
+          d[idx++] != 0x30 ||
+          d[idx++] != idlen ||
+          d[idx++] != 0x06 ||
+          d[idx++] != 3 ||
+          d[idx++] != (1 * 40) + 3 ||
+          d[idx++] != 101) {
+        throw new InvalidKeySpecException("unsupported key spec");
+      }
+      idx++; // OID, checked above
+      // parameters only with old OID
+      if (doid == OID_OLD) {
+        if (d[idx++] != 0x0a ||
+            d[idx++] != 1 ||
+            d[idx++] != 1) {
+          throw new InvalidKeySpecException("unsupported key spec");
+        }
+      } else {
+        // Handle parameter value of NULL
+        //
+        // Quote https://tools.ietf.org/html/draft-ietf-curdle-pkix-04 :
+        //   For all of the OIDs, the parameters MUST be absent.
+        //   Regardless of the defect in the original 1997 syntax,
+        //   implementations MUST NOT accept a parameters value of NULL.
+        //
+        // But Java's default keystore puts it in (when decoding as
+        // PKCS8 and then re-encoding to pass on), so we must accept it.
+        if (idlen == 7) {
+          if (d[idx++] != 0x05 ||
+              d[idx++] != 0) {
+            throw new InvalidKeySpecException("unsupported key spec");
+          }
+        }
+      }
+      if (d[idx++] != 0x03 ||
+          d[idx++] != 33 ||
+          d[idx++] != 0) {
+        throw new InvalidKeySpecException("unsupported key spec");
+      }
+      byte[] rv = new byte[32];
+      System.arraycopy(d, idx, rv, 0, 32);
+      return rv;
+    } catch (IndexOutOfBoundsException ioobe) {
+      throw new InvalidKeySpecException(ioobe);
     }
+  }
 
-    public EdDSAPublicKey(X509EncodedKeySpec spec) throws InvalidKeySpecException {
-        this(new EdDSAPublicKeySpec(decode(spec.getEncoded()),
-                                    EdDSANamedCurveTable.ED_25519_CURVE_SPEC));
-    }
+  @Override
+  public String getAlgorithm() {
+    return KEY_ALGORITHM;
+  }
 
-    @Override
-    public String getAlgorithm() {
-        return KEY_ALGORITHM;
-    }
-
-    @Override
-    public String getFormat() {
-        return "raw";
-    }
-
-    @Override
-    public byte[] getEncoded() {
-        return this.Abyte;
-    }
-
-
+  @Override
+  public String getFormat() {
+    return "raw";
+  }
 
 //    @Override
 //    public String getFormat() {
@@ -152,143 +241,50 @@ public class EdDSAPublicKey implements EdDSAKey, PublicKey {
 //        return rv;
 //    }
 //
-    /**
-     * Extracts the public key bytes from the provided encoding.
-     *<p>
-     * This will decode data conforming to the current spec at
-     * https://tools.ietf.org/html/draft-ietf-curdle-pkix-04
-     * or the old spec at
-     * https://tools.ietf.org/html/draft-josefsson-pkix-eddsa-04.
-     *</p><p>
-     * Contrary to draft-ietf-curdle-pkix-04, it WILL accept a parameter value
-     * of NULL, as it is required for interoperability with the default Java
-     * keystore. Other implementations MUST NOT copy this behaviour from here
-     * unless they also need to read keys from the default Java keystore.
-     *</p><p>
-     * This is really dumb for now. It does not use a general-purpose ASN.1 decoder.
-     * See also getEncoded().
-     *</p>
-     *
-     * @return 32 bytes for Ed25519, throws for other curves
-     */
-    private static byte[] decode(byte[] d) throws InvalidKeySpecException {
-        try {
-            //
-            // Setup and OID check
-            //
-            int totlen = 44;
-            int idlen = 5;
-            int doid = d[OID_BYTE];
-            if (doid == OID_OLD) {
-                totlen = 47;
-                idlen = 8;
-            } else if (doid == OID_ED25519) {
-                // Detect parameter value of NULL
-                if (d[IDLEN_BYTE] == 7) {
-                    totlen = 46;
-                    idlen = 7;
-                }
-            } else {
-                throw new InvalidKeySpecException("unsupported key spec");
-            }
 
-            //
-            // Pre-decoding check
-            //
-            if (d.length != totlen) {
-                throw new InvalidKeySpecException("invalid key spec length");
-            }
+  @Override
+  public byte[] getEncoded() {
+    return this.Abyte;
+  }
 
-            //
-            // Decoding
-            //
-            int idx = 0;
-            if (d[idx++] != 0x30 ||
-                d[idx++] != (totlen - 2) ||
-                d[idx++] != 0x30 ||
-                d[idx++] != idlen ||
-                d[idx++] != 0x06 ||
-                d[idx++] != 3 ||
-                d[idx++] != (1 * 40) + 3 ||
-                d[idx++] != 101) {
-                throw new InvalidKeySpecException("unsupported key spec");
-            }
-            idx++; // OID, checked above
-            // parameters only with old OID
-            if (doid == OID_OLD) {
-                if (d[idx++] != 0x0a ||
-                    d[idx++] != 1 ||
-                    d[idx++] != 1) {
-                    throw new InvalidKeySpecException("unsupported key spec");
-                }
-            } else {
-                // Handle parameter value of NULL
-                //
-                // Quote https://tools.ietf.org/html/draft-ietf-curdle-pkix-04 :
-                //   For all of the OIDs, the parameters MUST be absent.
-                //   Regardless of the defect in the original 1997 syntax,
-                //   implementations MUST NOT accept a parameters value of NULL.
-                //
-                // But Java's default keystore puts it in (when decoding as
-                // PKCS8 and then re-encoding to pass on), so we must accept it.
-                if (idlen == 7) {
-                    if (d[idx++] != 0x05 ||
-                        d[idx++] != 0) {
-                        throw new InvalidKeySpecException("unsupported key spec");
-                    }
-                }
-            }
-            if (d[idx++] != 0x03 ||
-                d[idx++] != 33 ||
-                d[idx++] != 0) {
-                throw new InvalidKeySpecException("unsupported key spec");
-            }
-            byte[] rv = new byte[32];
-            System.arraycopy(d, idx, rv, 0, 32);
-            return rv;
-        } catch (IndexOutOfBoundsException ioobe) {
-            throw new InvalidKeySpecException(ioobe);
-        }
+  @Override
+  public EdDSAParameterSpec getParams() {
+    return edDsaSpec;
+  }
+
+  public GroupElement getA() {
+    return A;
+  }
+
+  public GroupElement getNegativeA() {
+    // Only read Aneg once, otherwise read re-ordering might occur between here and return. Requires all GroupElement's fields to be final.
+    GroupElement ourAneg = Aneg;
+    if (ourAneg == null) {
+      ourAneg = A.negate();
+      Aneg = ourAneg;
     }
+    return ourAneg;
+  }
 
+  public byte[] getAbyte() {
+    return Abyte;
+  }
 
+  @Override
+  public int hashCode() {
+    return Arrays.hashCode(Abyte);
+  }
 
-    @Override
-    public EdDSAParameterSpec getParams() {
-        return edDsaSpec;
+  @Override
+  public boolean equals(Object o) {
+    if (o == this) {
+      return true;
     }
-
-    public GroupElement getA() {
-        return A;
+    if (!(o instanceof EdDSAPublicKey)) {
+      return false;
     }
-
-    public GroupElement getNegativeA() {
-        // Only read Aneg once, otherwise read re-ordering might occur between here and return. Requires all GroupElement's fields to be final.
-        GroupElement ourAneg = Aneg;
-        if(ourAneg == null) {
-            ourAneg = A.negate();
-            Aneg = ourAneg;
-        }
-        return ourAneg;
-    }
-
-    public byte[] getAbyte() {
-        return Abyte;
-    }
-
-    @Override
-    public int hashCode() {
-        return Arrays.hashCode(Abyte);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == this)
-            return true;
-        if (!(o instanceof EdDSAPublicKey))
-            return false;
-        EdDSAPublicKey pk = (EdDSAPublicKey) o;
-        return Arrays.equals(Abyte, pk.getAbyte()) &&
-               edDsaSpec.equals(pk.getParams());
-    }
+    EdDSAPublicKey pk = (EdDSAPublicKey) o;
+    return Arrays.equals(Abyte, pk.getAbyte()) &&
+        edDsaSpec.equals(pk.getParams());
+  }
 }
