@@ -33,12 +33,4 @@ public class EdDSASecurityProviderTest {
     assertNotNull(keyFac);
     assertNotNull(sgr);
   }
-
-  @Test
-  public void cannotGetInstancesWhenProviderIsNotPresent() throws Exception {
-    exception.expect(NoSuchProviderException.class);
-    KeyPairGenerator keyGen = KeyPairGenerator.getInstance(EdDSAKey.KEY_ALGORITHM, "EdDSA");
-
-    assertNotNull(keyGen);
-  }
 }
