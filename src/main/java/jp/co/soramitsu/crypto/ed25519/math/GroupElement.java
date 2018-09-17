@@ -329,7 +329,7 @@ public class GroupElement implements Serializable {
     int i;
     // Radix 16 notation
     for (i = 0; i < 32; i++) {
-      e[2 * i + 0] = (byte) (a[i] & 15);
+      e[2 * i] = (byte) (a[i] & 15);
       e[2 * i + 1] = (byte) ((a[i] >> 4) & 15);
     }
     /* each e[i] is between 0 and 15 */
@@ -358,7 +358,7 @@ public class GroupElement implements Serializable {
    * @param a $= a[0]+256*a[1]+\dots+256^{31} a[31]$.
    * @return The byte array $r$ in the above described form.
    */
-  static byte[] slide(final byte[] a) {
+  private static byte[] slide(final byte[] a) {
     byte[] r = new byte[256];
 
     // Put each bit of 'a' into a separate byte, 0 or 1
@@ -372,10 +372,10 @@ public class GroupElement implements Serializable {
         for (int b = 1; b <= 6 && i + b < 256; ++b) {
           // Accumulate bits if possible
           if (r[i + b] != 0) {
-            if (r[i] + (r[i + b] << b) <= 15) {
+            if ((r[i] + (r[i + b] << b)) <= 15) {
               r[i] += r[i + b] << b;
               r[i + b] = 0;
-            } else if (r[i] - (r[i + b] << b) >= -15) {
+            } else if ((r[i] - (r[i + b] << b)) >= -15) {
               r[i] -= r[i + b] << b;
               for (int k = i + b; k < 256; ++k) {
                 if (r[k] == 0) {
@@ -526,11 +526,10 @@ public class GroupElement implements Serializable {
   private GroupElement toRep(final Representation repr) {
     switch (this.repr) {
       case P2:
-        switch (repr) {
-          case P2:
-            return p2(this.curve, this.X, this.Y, this.Z);
-          default:
-            throw new IllegalArgumentException();
+        if (repr == Representation.P2) {
+          return p2(this.curve, this.X, this.Y, this.Z);
+        } else {
+          throw new IllegalArgumentException();
         }
       case P3:
         switch (repr) {
@@ -561,18 +560,16 @@ public class GroupElement implements Serializable {
             throw new IllegalArgumentException();
         }
       case PRECOMP:
-        switch (repr) {
-          case PRECOMP:
-            return precomp(this.curve, this.X, this.Y, this.Z);
-          default:
-            throw new IllegalArgumentException();
+        if (repr == Representation.PRECOMP) {
+          return precomp(this.curve, this.X, this.Y, this.Z);
+        } else {
+          throw new IllegalArgumentException();
         }
       case CACHED:
-        switch (repr) {
-          case CACHED:
-            return cached(this.curve, this.X, this.Y, this.Z, this.T);
-          default:
-            throw new IllegalArgumentException();
+        if (repr == Representation.CACHED) {
+          return cached(this.curve, this.X, this.Y, this.Z, this.T);
+        } else {
+          throw new IllegalArgumentException();
         }
       default:
         throw new UnsupportedOperationException();
@@ -659,7 +656,13 @@ public class GroupElement implements Serializable {
     switch (this.repr) {
       case P2:
       case P3: // Ignore T for P3 representation
-        FieldElement XX, YY, B, A, AA, Yn, Zn;
+        FieldElement XX;
+        FieldElement YY;
+        FieldElement B;
+        FieldElement A;
+        FieldElement AA;
+        FieldElement Yn;
+        FieldElement Zn;
         XX = this.X.square();
         YY = this.Y.square();
         B = this.Z.squareAndDouble();
@@ -685,9 +688,11 @@ public class GroupElement implements Serializable {
    * <p>
    * $r = ((X' : Z'), (Y' : T'))$ where
    * <p><ul>
-   * <li>$X' = (Y1 + X1) * q.X - (Y1 - X1) * q.Y = ((Y1 + X1) * (Y2 + X2) - (Y1 - X1) * (Y2 - X2)) *
+   * <li>$X' = (Y1 + X1) * q.X - (Y1 - X1) * q.Y = ((Y1 + X1) * (Y2 + X2) - (Y1 - X1) * (Y2 - X2))
+   * *
    * 1/Z2$
-   * <li>$Y' = (Y1 + X1) * q.X + (Y1 - X1) * q.Y = ((Y1 + X1) * (Y2 + X2) + (Y1 - X1) * (Y2 - X2)) *
+   * <li>$Y' = (Y1 + X1) * q.X + (Y1 - X1) * q.Y = ((Y1 + X1) * (Y2 + X2) + (Y1 - X1) * (Y2 - X2))
+   * *
    * 1/Z2$
    * <li>$Z' = 2 * Z1 + T1 * q.Z = 2 * Z1 + T1 * 2 * d * X2 * Y2 * 1/Z2^2 = (2 * Z1 * Z2 + 2 * d *
    * T1 * T2) * 1/Z2$
@@ -727,7 +732,12 @@ public class GroupElement implements Serializable {
       throw new IllegalArgumentException();
     }
 
-    FieldElement YpX, YmX, A, B, C, D;
+    FieldElement YpX;
+    FieldElement YmX;
+    FieldElement A;
+    FieldElement B;
+    FieldElement C;
+    FieldElement D;
     YpX = this.Y.add(this.X);
     YmX = this.Y.subtract(this.X);
     A = YpX.multiply(q.X); // q->y+x
@@ -759,7 +769,12 @@ public class GroupElement implements Serializable {
       throw new IllegalArgumentException();
     }
 
-    FieldElement YpX, YmX, A, B, C, D;
+    FieldElement YpX;
+    FieldElement YmX;
+    FieldElement A;
+    FieldElement B;
+    FieldElement C;
+    FieldElement D;
     YpX = this.Y.add(this.X);
     YmX = this.Y.subtract(this.X);
     A = YpX.multiply(q.Y); // q->y-x
@@ -804,7 +819,13 @@ public class GroupElement implements Serializable {
       throw new IllegalArgumentException();
     }
 
-    FieldElement YpX, YmX, A, B, C, ZZ, D;
+    FieldElement YpX;
+    FieldElement YmX;
+    FieldElement A;
+    FieldElement B;
+    FieldElement C;
+    FieldElement ZZ;
+    FieldElement D;
     YpX = this.Y.add(this.X);
     YmX = this.Y.subtract(this.X);
     A = YpX.multiply(q.X); // q->Y+X

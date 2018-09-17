@@ -1,5 +1,7 @@
 package jp.co.soramitsu.crypto.ed25519;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.security.KeyFactory;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchProviderException;
@@ -18,16 +20,25 @@ public class EdDSASecurityProviderTest {
   public void canGetInstancesWhenProviderIsPresent() throws Exception {
     Security.addProvider(new EdDSASecurityProvider());
 
-    KeyPairGenerator keyGen = KeyPairGenerator.getInstance(EdDSAKey.KEY_ALGORITHM, "EdDSA");
-    KeyFactory keyFac = KeyFactory.getInstance(EdDSAKey.KEY_ALGORITHM, "EdDSA");
-    Signature sgr = Signature.getInstance(EdDSAEngine.SIGNATURE_ALGORITHM, "EdDSA");
+    final String providerName = "EdDSA";
+    assertNotNull(Security.getProvider(providerName));
 
-    Security.removeProvider("EdDSA");
+    KeyPairGenerator keyGen = KeyPairGenerator.getInstance(EdDSAKey.KEY_ALGORITHM, providerName);
+    KeyFactory keyFac = KeyFactory.getInstance(EdDSAKey.KEY_ALGORITHM, providerName);
+    Signature sgr = Signature.getInstance(EdDSAEngine.SIGNATURE_ALGORITHM, providerName);
+
+    Security.removeProvider(providerName);
+
+    assertNotNull(keyGen);
+    assertNotNull(keyFac);
+    assertNotNull(sgr);
   }
 
   @Test
   public void cannotGetInstancesWhenProviderIsNotPresent() throws Exception {
     exception.expect(NoSuchProviderException.class);
     KeyPairGenerator keyGen = KeyPairGenerator.getInstance(EdDSAKey.KEY_ALGORITHM, "EdDSA");
+
+    assertNotNull(keyGen);
   }
 }
