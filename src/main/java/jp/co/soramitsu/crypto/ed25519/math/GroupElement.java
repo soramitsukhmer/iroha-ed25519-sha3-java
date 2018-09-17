@@ -689,11 +689,9 @@ public class GroupElement implements Serializable {
    * $r = ((X' : Z'), (Y' : T'))$ where
    * <p><ul>
    * <li>$X' = (Y1 + X1) * q.X - (Y1 - X1) * q.Y = ((Y1 + X1) * (Y2 + X2) - (Y1 - X1) * (Y2 - X2))
-   * *
-   * 1/Z2$
+   * * 1/Z2$
    * <li>$Y' = (Y1 + X1) * q.X + (Y1 - X1) * q.Y = ((Y1 + X1) * (Y2 + X2) + (Y1 - X1) * (Y2 - X2))
-   * *
-   * 1/Z2$
+   * * 1/Z2$
    * <li>$Z' = 2 * Z1 + T1 * q.Z = 2 * Z1 + T1 * 2 * d * X2 * Y2 * 1/Z2^2 = (2 * Z1 * Z2 + 2 * d *
    * T1 * T2) * 1/Z2$
    * <li>$T' = 2 * Z1 - T1 * q.Z = 2 * Z1 - T1 * 2 * d * X2 * Y2 * 1/Z2^2 = (2 * Z1 * Z2 - 2 * d *

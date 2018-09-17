@@ -1,5 +1,6 @@
 package jp.co.soramitsu.crypto.ed25519;
 
+import static jp.co.soramitsu.crypto.ed25519.EdDSAEngine.ONE_SHOT_MODE;
 import static jp.co.soramitsu.crypto.ed25519.spec.EdDSANamedCurveTable.ED_25519;
 
 import java.security.KeyPair;
@@ -7,7 +8,6 @@ import java.security.MessageDigest;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.Security;
-import java.security.Signature;
 import jp.co.soramitsu.crypto.ed25519.spec.EdDSANamedCurveTable;
 import jp.co.soramitsu.crypto.ed25519.spec.EdDSAParameterSpec;
 import jp.co.soramitsu.crypto.ed25519.spec.EdDSAPrivateKeySpec;
@@ -21,11 +21,11 @@ public class Ed25519Sha3 {
     Security.addProvider(new EdDSASecurityProvider());
   }
 
-  private Signature sgr;
+  private EdDSAEngine sgr;
   private KeyPairGenerator keyGen;
 
 
-  public Ed25519Sha3() throws CryptoException {
+  public Ed25519Sha3() {
     try {
       this.keyGen = new KeyPairGenerator();
       this.sgr = new EdDSAEngine(
@@ -70,9 +70,10 @@ public class Ed25519Sha3 {
     return ((EdDSAPrivateKey) priv).getSeed();
   }
 
-  public byte[] rawSign(byte[] data, KeyPair keypair) throws CryptoException {
+  public byte[] rawSign(byte[] data, KeyPair keypair) {
     try {
       sgr.initSign(keypair.getPrivate());
+      sgr.setParameter(ONE_SHOT_MODE);
       sgr.update(data);
       return sgr.sign();
     } catch (Exception e) {
@@ -80,10 +81,10 @@ public class Ed25519Sha3 {
     }
   }
 
-  public boolean rawVerify(byte[] data, byte[] signature, PublicKey publicKey)
-      throws CryptoException {
+  public boolean rawVerify(byte[] data, byte[] signature, PublicKey publicKey) {
     try {
       sgr.initVerify(publicKey);
+      sgr.setParameter(ONE_SHOT_MODE);
       sgr.update(data);
       return sgr.verify(signature);
     } catch (Exception e) {
@@ -91,7 +92,7 @@ public class Ed25519Sha3 {
     }
   }
 
-  public KeyPair generateKeypair() throws CryptoException {
+  public KeyPair generateKeypair() {
     try {
       return keyGen.generateKeyPair();
     } catch (Exception e) {
@@ -99,7 +100,7 @@ public class Ed25519Sha3 {
     }
   }
 
-  public KeyPair generateKeypair(byte[] seed) throws CryptoException {
+  public KeyPair generateKeypair(byte[] seed) {
     try {
       EdDSAPrivateKeySpec privKey = new EdDSAPrivateKeySpec(seed, spec);
       EdDSAPublicKeySpec pubKey = new EdDSAPublicKeySpec(privKey.getA(), spec);
@@ -114,9 +115,9 @@ public class Ed25519Sha3 {
     }
   }
 
-  public static class CryptoException extends Exception {
+  public static class CryptoException extends RuntimeException {
 
-    public CryptoException(Exception e) {
+    CryptoException(Exception e) {
       super(e);
     }
   }

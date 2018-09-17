@@ -36,7 +36,8 @@ public class Ed25519LittleEndianEncoding extends Encoding {
    * <h2>Assumption:</h2>
    * <ul>
    * <li>$p = 2^{255} - 19$
-   * <li>$h = h_0 + 2^{25} * h_1 + 2^{(26+25)} * h_2 + \dots + 2^{230} * h_9$ where $0 \le |h_i| \lt
+   * <li>$h = h_0 + 2^{25} * h_1 + 2^{(26+25)} * h_2 + \dots + 2^{230} * h_9$ where $0 \le |h_i|
+   * \lt
    * 2^{27}$ for all $i=0,\dots,9$.
    * <li>$h \cong r \mod p$, i.e. $h = r + q * p$ for some suitable $0 \le r \lt p$ and an integer
    * $q$.

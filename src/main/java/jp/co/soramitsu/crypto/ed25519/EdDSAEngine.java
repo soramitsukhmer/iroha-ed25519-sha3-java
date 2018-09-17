@@ -15,6 +15,7 @@ import java.util.Arrays;
 import jp.co.soramitsu.crypto.ed25519.math.Curve;
 import jp.co.soramitsu.crypto.ed25519.math.GroupElement;
 import jp.co.soramitsu.crypto.ed25519.math.ScalarOps;
+import jp.co.soramitsu.crypto.ed25519.spec.EdDSAParameterSpec;
 
 /**
  * Signing and verification for EdDSA.
@@ -99,22 +100,25 @@ public final class EdDSAEngine extends Signature {
     if (privateKey instanceof EdDSAPrivateKey) {
       EdDSAPrivateKey privKey = (EdDSAPrivateKey) privateKey;
       key = privKey;
-
-      if (digest == null) {
-        // Instantiate the digest from the key parameters
-        try {
-          digest = MessageDigest.getInstance(key.getParams().getHashAlgorithm());
-        } catch (NoSuchAlgorithmException e) {
-          throw new InvalidKeyException(
-              "cannot get required digest " + key.getParams().getHashAlgorithm()
-                  + " for private key.");
-        }
-      } else if (!key.getParams().getHashAlgorithm().equals(digest.getAlgorithm())) {
-        throw new InvalidKeyException("Key hash algorithm does not match chosen digest");
-      }
+      getDigestInstance(key.getParams());
       digestInitSign(privKey);
     } else {
       throw new InvalidKeyException("cannot identify EdDSA private key: " + privateKey.getClass());
+    }
+  }
+
+  private void getDigestInstance(EdDSAParameterSpec params) throws InvalidKeyException {
+    if (digest == null) {
+      // Instantiate the digest from the key parameters
+      try {
+        digest = MessageDigest.getInstance(params.getHashAlgorithm());
+      } catch (NoSuchAlgorithmException e) {
+        throw new InvalidKeyException(
+            "cannot get required digest " + params.getHashAlgorithm()
+                + " for private key.");
+      }
+    } else if (!params.getHashAlgorithm().equals(digest.getAlgorithm())) {
+      throw new InvalidKeyException("Key hash algorithm does not match chosen digest");
     }
   }
 
@@ -131,19 +135,7 @@ public final class EdDSAEngine extends Signature {
 
     if (publicKey instanceof EdDSAPublicKey) {
       key = (EdDSAPublicKey) publicKey;
-
-      if (digest == null) {
-        // Instantiate the digest from the key parameters
-        try {
-          digest = MessageDigest.getInstance(key.getParams().getHashAlgorithm());
-        } catch (NoSuchAlgorithmException e) {
-          throw new InvalidKeyException(
-              "cannot get required digest " + key.getParams().getHashAlgorithm()
-                  + " for private key.");
-        }
-      } else if (!key.getParams().getHashAlgorithm().equals(digest.getAlgorithm())) {
-        throw new InvalidKeyException("Key hash algorithm does not match chosen digest");
-      }
+      getDigestInstance(key.getParams());
     } else {
       throw new InvalidKeyException("cannot identify EdDSA public key: " + publicKey.getClass());
     }
@@ -203,7 +195,8 @@ public final class EdDSAEngine extends Signature {
     byte[] a = ((EdDSAPrivateKey) key).geta();
 
     byte[] message;
-    int offset, length;
+    int offset;
+    int length;
     if (oneShotMode) {
       if (oneShotBytes == null) {
         throw new SignatureException("update() not called first");
