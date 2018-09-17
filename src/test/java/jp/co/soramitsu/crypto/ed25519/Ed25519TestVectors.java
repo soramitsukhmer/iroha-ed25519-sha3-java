@@ -1,12 +1,11 @@
 /**
  * EdDSA-Java by str4d
  *
- * To the extent possible under law, the person who associated CC0 with
- * EdDSA-Java has waived all copyright and related or neighboring rights
- * to EdDSA-Java.
+ * To the extent possible under law, the person who associated CC0 with EdDSA-Java has waived all
+ * copyright and related or neighboring rights to EdDSA-Java.
  *
- * You should have received a copy of the CC0 legalcode along with this
- * work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
+ * You should have received a copy of the CC0 legalcode along with this work. If not, see
+ * <https://creativecommons.org/publicdomain/zero/1.0/>.
  */
 package jp.co.soramitsu.crypto.ed25519;
 
@@ -20,25 +19,6 @@ import java.util.List;
 import javax.xml.bind.DatatypeConverter;
 
 public class Ed25519TestVectors {
-
-  public static class TestTuple {
-
-    public static int numCases;
-    public int caseNum;
-    public byte[] seed;
-    public byte[] pk;
-    public byte[] message;
-    public byte[] sig;
-
-    public TestTuple(String line) {
-      caseNum = ++numCases;
-      String[] x = line.split(":");
-      seed = DatatypeConverter.parseHexBinary(x[0].substring(0, 64)); // private key
-      pk = DatatypeConverter.parseHexBinary(x[1]); // public key
-      message = DatatypeConverter.parseHexBinary(x[2]);
-      sig = DatatypeConverter.parseHexBinary(x[3].substring(0, 128));
-    }
-  }
 
   public static Collection<TestTuple> testCases = getTestData("/test.data.sha3");
 
@@ -66,5 +46,24 @@ public class Ed25519TestVectors {
       }
     }
     return testCases;
+  }
+
+  public static class TestTuple {
+
+    public static int numCases;
+    public int caseNum;
+    public byte[] seed;
+    public byte[] pk;
+    public byte[] message;
+    public byte[] sig;
+
+    public TestTuple(String line) {
+      caseNum = ++numCases;
+      String[] x = line.split(":");
+      seed = DatatypeConverter.parseHexBinary(x[0].substring(0, 64)); // private key
+      pk = DatatypeConverter.parseHexBinary(x[1]); // public key
+      message = DatatypeConverter.parseHexBinary(x[2]);
+      sig = DatatypeConverter.parseHexBinary(x[3].substring(0, 128));
+    }
   }
 }

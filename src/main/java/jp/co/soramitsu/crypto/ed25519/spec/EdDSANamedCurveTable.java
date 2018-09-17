@@ -1,12 +1,11 @@
 /**
  * EdDSA-Java by str4d
  *
- * To the extent possible under law, the person who associated CC0 with
- * EdDSA-Java has waived all copyright and related or neighboring rights
- * to EdDSA-Java.
+ * To the extent possible under law, the person who associated CC0 with EdDSA-Java has waived all
+ * copyright and related or neighboring rights to EdDSA-Java.
  *
- * You should have received a copy of the CC0 legalcode along with this
- * work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
+ * You should have received a copy of the CC0 legalcode along with this work. If not, see
+ * <https://creativecommons.org/publicdomain/zero/1.0/>.
  */
 package jp.co.soramitsu.crypto.ed25519.spec;
 
@@ -51,6 +50,11 @@ public class EdDSANamedCurveTable {
 
   private static volatile HashMap<String, EdDSANamedCurveSpec> curves = new HashMap<String, EdDSANamedCurveSpec>();
 
+  static {
+    // RFC 8032
+    defineCurve(ED_25519_CURVE_SPEC);
+  }
+
   private static synchronized void putCurve(String name, EdDSANamedCurveSpec curve) {
     HashMap<String, EdDSANamedCurveSpec> newCurves = new HashMap<String, EdDSANamedCurveSpec>(
         curves);
@@ -68,11 +72,6 @@ public class EdDSANamedCurveTable {
       throw new IllegalStateException();
     }
     putCurve(alias.toLowerCase(Locale.ENGLISH), curve);
-  }
-
-  static {
-    // RFC 8032
-    defineCurve(ED_25519_CURVE_SPEC);
   }
 
   public static EdDSANamedCurveSpec getByName(String name) {

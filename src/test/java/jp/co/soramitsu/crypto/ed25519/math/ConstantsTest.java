@@ -1,13 +1,11 @@
 /**
  * EdDSA-Java by str4d
  *
- * To the extent possible under law, the person who associated CC0 with
- * EdDSA-Java has waived all copyright and related or neighboring rights
- * to EdDSA-Java.
+ * To the extent possible under law, the person who associated CC0 with EdDSA-Java has waived all
+ * copyright and related or neighboring rights to EdDSA-Java.
  *
- * You should have received a copy of the CC0 legalcode along with this
- * work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
- *
+ * You should have received a copy of the CC0 legalcode along with this work. If not, see
+ * <https://creativecommons.org/publicdomain/zero/1.0/>.
  */
 package jp.co.soramitsu.crypto.ed25519.math;
 
@@ -19,10 +17,8 @@ import static org.junit.Assert.fail;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
 import jp.co.soramitsu.crypto.ed25519.spec.EdDSANamedCurveSpec;
 import jp.co.soramitsu.crypto.ed25519.spec.EdDSANamedCurveTable;
-
 import org.junit.Test;
 
 /**
@@ -31,26 +27,28 @@ import org.junit.Test;
  *
  */
 public class ConstantsTest {
-    static final EdDSANamedCurveSpec ed25519 = EdDSANamedCurveTable.getByName(EdDSANamedCurveTable.ED_25519);
-    static final Curve curve = ed25519.getCurve();
 
-    static final FieldElement ZERO = curve.getField().ZERO;
-    static final FieldElement ONE = curve.getField().ONE;
-    static final FieldElement TWO = curve.getField().TWO;
+  static final EdDSANamedCurveSpec ed25519 = EdDSANamedCurveTable
+      .getByName(EdDSANamedCurveTable.ED_25519);
+  static final Curve curve = ed25519.getCurve();
 
-    static final GroupElement P3_ZERO = GroupElement.p3(curve, ZERO, ONE, ONE, ZERO);
+  static final FieldElement ZERO = curve.getField().ZERO;
+  static final FieldElement ONE = curve.getField().ONE;
+  static final FieldElement TWO = curve.getField().TWO;
 
-    @Test
-    public void testb() {
-        int b = curve.getField().getb();
-        assertThat(b, is(greaterThanOrEqualTo(10)));
-        try {
-            MessageDigest h = MessageDigest.getInstance(ed25519.getHashAlgorithm());
-            assertThat(8 * h.getDigestLength(), is(equalTo(2 * b)));
-        } catch (NoSuchAlgorithmException e) {
-            fail(e.getMessage());
-        }
+  static final GroupElement P3_ZERO = GroupElement.p3(curve, ZERO, ONE, ONE, ZERO);
+
+  @Test
+  public void testb() {
+    int b = curve.getField().getb();
+    assertThat(b, is(greaterThanOrEqualTo(10)));
+    try {
+      MessageDigest h = MessageDigest.getInstance(ed25519.getHashAlgorithm());
+      assertThat(8 * h.getDigestLength(), is(equalTo(2 * b)));
+    } catch (NoSuchAlgorithmException e) {
+      fail(e.getMessage());
     }
+  }
 
     /*@Test
     public void testq() {
@@ -81,10 +79,10 @@ public class ConstantsTest {
         assertThat(curve.getI().modPow(curve.getField().TWO, q), is(equalTo(q.subtractOne())));
     }*/
 
-    @Test
-    public void testB() {
-        GroupElement B = ed25519.getB();
-        assertThat(B.isOnCurve(curve), is(true));
-        //assertThat(B.scalarMultiply(new BigIntegerLittleEndianEncoding().encode(ed25519.getL(), curve.getField().getb()/8)), is(equalTo(P3_ZERO)));
-    }
+  @Test
+  public void testB() {
+    GroupElement B = ed25519.getB();
+    assertThat(B.isOnCurve(curve), is(true));
+    //assertThat(B.scalarMultiply(new BigIntegerLittleEndianEncoding().encode(ed25519.getL(), curve.getField().getb()/8)), is(equalTo(P3_ZERO)));
+  }
 }

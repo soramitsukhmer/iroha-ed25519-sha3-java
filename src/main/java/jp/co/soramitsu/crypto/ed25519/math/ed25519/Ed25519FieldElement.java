@@ -1,12 +1,11 @@
 /**
  * EdDSA-Java by str4d
  *
- * To the extent possible under law, the person who associated CC0 with
- * EdDSA-Java has waived all copyright and related or neighboring rights
- * to EdDSA-Java.
+ * To the extent possible under law, the person who associated CC0 with EdDSA-Java has waived all
+ * copyright and related or neighboring rights to EdDSA-Java.
  *
- * You should have received a copy of the CC0 legalcode along with this
- * work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
+ * You should have received a copy of the CC0 legalcode along with this work. If not, see
+ * <https://creativecommons.org/publicdomain/zero/1.0/>.
  */
 package jp.co.soramitsu.crypto.ed25519.math.ed25519;
 
@@ -27,6 +26,7 @@ import jp.co.soramitsu.crypto.ed25519.math.FieldElement;
  */
 public class Ed25519FieldElement extends FieldElement {
 
+  private static final byte[] ZERO = new byte[32];
   /**
    * Variable is package private for encoding.
    */
@@ -45,8 +45,6 @@ public class Ed25519FieldElement extends FieldElement {
     }
     this.t = t;
   }
-
-  private static final byte[] ZERO = new byte[32];
 
   /**
    * Gets a value indicating whether or not the field element is non-zero.
@@ -342,10 +340,10 @@ public class Ed25519FieldElement extends FieldElement {
     carry4 = (h4 + (long) (1 << 25)) >> 26;
     h5 += carry4;
     h4 -= carry4 << 26;
-        /* |h0| <= 2^25 */
-        /* |h4| <= 2^25 */
-        /* |h1| <= 1.71*2^59 */
-        /* |h5| <= 1.71*2^59 */
+    /* |h0| <= 2^25 */
+    /* |h4| <= 2^25 */
+    /* |h1| <= 1.71*2^59 */
+    /* |h5| <= 1.71*2^59 */
 
     carry1 = (h1 + (long) (1 << 24)) >> 25;
     h2 += carry1;
@@ -353,10 +351,10 @@ public class Ed25519FieldElement extends FieldElement {
     carry5 = (h5 + (long) (1 << 24)) >> 25;
     h6 += carry5;
     h5 -= carry5 << 25;
-        /* |h1| <= 2^24; from now on fits into int32 */
-        /* |h5| <= 2^24; from now on fits into int32 */
-        /* |h2| <= 1.41*2^60 */
-        /* |h6| <= 1.41*2^60 */
+    /* |h1| <= 2^24; from now on fits into int32 */
+    /* |h5| <= 2^24; from now on fits into int32 */
+    /* |h2| <= 1.41*2^60 */
+    /* |h6| <= 1.41*2^60 */
 
     carry2 = (h2 + (long) (1 << 25)) >> 26;
     h3 += carry2;
@@ -364,10 +362,10 @@ public class Ed25519FieldElement extends FieldElement {
     carry6 = (h6 + (long) (1 << 25)) >> 26;
     h7 += carry6;
     h6 -= carry6 << 26;
-        /* |h2| <= 2^25; from now on fits into int32 unchanged */
-        /* |h6| <= 2^25; from now on fits into int32 unchanged */
-        /* |h3| <= 1.71*2^59 */
-        /* |h7| <= 1.71*2^59 */
+    /* |h2| <= 2^25; from now on fits into int32 unchanged */
+    /* |h6| <= 2^25; from now on fits into int32 unchanged */
+    /* |h3| <= 1.71*2^59 */
+    /* |h7| <= 1.71*2^59 */
 
     carry3 = (h3 + (long) (1 << 24)) >> 25;
     h4 += carry3;
@@ -375,10 +373,10 @@ public class Ed25519FieldElement extends FieldElement {
     carry7 = (h7 + (long) (1 << 24)) >> 25;
     h8 += carry7;
     h7 -= carry7 << 25;
-        /* |h3| <= 2^24; from now on fits into int32 unchanged */
-        /* |h7| <= 2^24; from now on fits into int32 unchanged */
-        /* |h4| <= 1.72*2^34 */
-        /* |h8| <= 1.41*2^60 */
+    /* |h3| <= 2^24; from now on fits into int32 unchanged */
+    /* |h7| <= 2^24; from now on fits into int32 unchanged */
+    /* |h4| <= 1.72*2^34 */
+    /* |h8| <= 1.41*2^60 */
 
     carry4 = (h4 + (long) (1 << 25)) >> 26;
     h5 += carry4;
@@ -386,22 +384,22 @@ public class Ed25519FieldElement extends FieldElement {
     carry8 = (h8 + (long) (1 << 25)) >> 26;
     h9 += carry8;
     h8 -= carry8 << 26;
-        /* |h4| <= 2^25; from now on fits into int32 unchanged */
-        /* |h8| <= 2^25; from now on fits into int32 unchanged */
-        /* |h5| <= 1.01*2^24 */
-        /* |h9| <= 1.71*2^59 */
+    /* |h4| <= 2^25; from now on fits into int32 unchanged */
+    /* |h8| <= 2^25; from now on fits into int32 unchanged */
+    /* |h5| <= 1.01*2^24 */
+    /* |h9| <= 1.71*2^59 */
 
     carry9 = (h9 + (long) (1 << 24)) >> 25;
     h0 += carry9 * 19;
     h9 -= carry9 << 25;
-        /* |h9| <= 2^24; from now on fits into int32 unchanged */
-        /* |h0| <= 1.1*2^39 */
+    /* |h9| <= 2^24; from now on fits into int32 unchanged */
+    /* |h0| <= 1.1*2^39 */
 
     carry0 = (h0 + (long) (1 << 25)) >> 26;
     h1 += carry0;
     h0 -= carry0 << 26;
-        /* |h0| <= 2^25; from now on fits into int32 unchanged */
-        /* |h1| <= 1.01*2^24 */
+    /* |h0| <= 2^25; from now on fits into int32 unchanged */
+    /* |h1| <= 1.01*2^24 */
 
     int[] h = new int[10];
     h[0] = (int) h0;

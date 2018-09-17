@@ -1,12 +1,11 @@
 /**
  * EdDSA-Java by str4d
  *
- * To the extent possible under law, the person who associated CC0 with
- * EdDSA-Java has waived all copyright and related or neighboring rights
- * to EdDSA-Java.
+ * To the extent possible under law, the person who associated CC0 with EdDSA-Java has waived all
+ * copyright and related or neighboring rights to EdDSA-Java.
  *
- * You should have received a copy of the CC0 legalcode along with this
- * work. If not, see <https://creativecommons.org/publicdomain/zero/1.0/>.
+ * You should have received a copy of the CC0 legalcode along with this work. If not, see
+ * <https://creativecommons.org/publicdomain/zero/1.0/>.
  */
 package jp.co.soramitsu.crypto.ed25519;
 
@@ -39,7 +38,8 @@ public class EdDSAEngineTest {
       .parseHexBinary("0000000000000000000000000000000000000000000000000000000000000000");
   private static final byte[] TEST_PK = DatatypeConverter
       .parseHexBinary("43eeb17f0bab10dd51ab70983c25200a1742d31b3b7b54c38c34d7b827b26eed");
-  private static final byte[] TEST_MSG = "This is a secret message".getBytes(Charset.forName("UTF-8"));
+  private static final byte[] TEST_MSG = "This is a secret message"
+      .getBytes(Charset.forName("UTF-8"));
   private static final byte[] TEST_MSG_SIG = DatatypeConverter.parseHexBinary(
       "fb95fd5387920d177e9281821ceacca377b9e897aa6ddad6a9224b10827fde9105873e89e5cf067a3f42cfe7b8fb3f9b1fe3d8c185cfbdc850f45e823e038300");
 
