@@ -1,12 +1,3 @@
-/**
- * EdDSA-Java by str4d
- *
- * To the extent possible under law, the person who associated CC0 with EdDSA-Java has waived all
- * copyright and related or neighboring rights to EdDSA-Java.
- *
- * You should have received a copy of the CC0 legalcode along with this work. If not, see
- * <https://creativecommons.org/publicdomain/zero/1.0/>.
- */
 package jp.co.soramitsu.crypto.ed25519;
 
 import java.io.ByteArrayOutputStream;
@@ -27,48 +18,43 @@ import jp.co.soramitsu.crypto.ed25519.math.ScalarOps;
 
 /**
  * Signing and verification for EdDSA.
- *<p>
- * The EdDSA sign and verify algorithms do not interact well with
- * the Java Signature API, as one or more update() methods must be
- * called before sign() or verify(). Using the standard API,
- * this implementation must copy and buffer all data passed in
- * via update().
- *</p><p>
- * This implementation offers two ways to avoid this copying,
- * but only if all data to be signed or verified is available
- * in a single byte array.
- *</p><p>
- *Option 1:
- *</p><ol>
- *<li>Call initSign() or initVerify() as usual.
- *</li><li>Call setParameter(ONE_SHOT_MODE)
- *</li><li>Call update(byte[]) or update(byte[], int, int) exactly once
- *</li><li>Call sign() or verify() as usual.
- *</li><li>If doing additional one-shot signs or verifies with this object, you must
- *         call setParameter(ONE_SHOT_MODE) each time
- *</li></ol>
+ * <p>
+ * The EdDSA sign and verify algorithms do not interact well with the Java Signature API, as one or
+ * more update() methods must be called before sign() or verify(). Using the standard API, this
+ * implementation must copy and buffer all data passed in via update().
+ * </p><p>
+ * This implementation offers two ways to avoid this copying, but only if all data to be signed or
+ * verified is available in a single byte array.
+ * </p><p>
+ * Option 1:
+ * </p><ol>
+ * <li>Call initSign() or initVerify() as usual.
+ * </li><li>Call setParameter(ONE_SHOT_MODE)
+ * </li><li>Call update(byte[]) or update(byte[], int, int) exactly once
+ * </li><li>Call sign() or verify() as usual.
+ * </li><li>If doing additional one-shot signs or verifies with this object, you must
+ * call setParameter(ONE_SHOT_MODE) each time
+ * </li></ol>
  *
- *<p>
- *Option 2:
- *</p><ol>
- *<li>Call initSign() or initVerify() as usual.
- *</li><li>Call one of the signOneShot() or verifyOneShot() methods.
- *</li><li>If doing additional one-shot signs or verifies with this object,
- *         just call signOneShot() or verifyOneShot() again.
- *</li></ol>
+ * <p>
+ * Option 2:
+ * </p><ol>
+ * <li>Call initSign() or initVerify() as usual.
+ * </li><li>Call one of the signOneShot() or verifyOneShot() methods.
+ * </li><li>If doing additional one-shot signs or verifies with this object,
+ * just call signOneShot() or verifyOneShot() again.
+ * </li></ol>
  *
  * @author str4d
- *
  */
 public final class EdDSAEngine extends Signature {
 
   public static final String SIGNATURE_ALGORITHM = "EdDSA/SHA3";
   /**
-   *  To efficiently sign or verify data in one shot, pass this to setParameters()
-   *  after initSign() or initVerify() but BEFORE THE FIRST AND ONLY
-   *  update(data) or update(data, off, len). The data reference will be saved
-   *  and then used in sign() or verify() without copying the data.
-   *  Violate these rules and you will get a SignatureException.
+   * To efficiently sign or verify data in one shot, pass this to setParameters() after initSign()
+   * or initVerify() but BEFORE THE FIRST AND ONLY update(data) or update(data, off, len). The data
+   * reference will be saved and then used in sign() or verify() without copying the data. Violate
+   * these rules and you will get a SignatureException.
    */
   public static final AlgorithmParameterSpec ONE_SHOT_MODE = new OneShotSpec();
   private MessageDigest digest;
@@ -88,6 +74,7 @@ public final class EdDSAEngine extends Signature {
 
   /**
    * Specific EdDSA-internal hash requested, only matching keys will be allowed.
+   *
    * @param digest the hash algorithm that keys must have to sign or verify.
    */
   public EdDSAEngine(MessageDigest digest) {
@@ -281,7 +268,8 @@ public final class EdDSAEngine extends Signature {
     digest.update(((EdDSAPublicKey) key).getAbyte());
     // h = H(Rbar,Abar,M)
     byte[] message;
-    int offset, length;
+    int offset;
+    int length;
     if (oneShotMode) {
       if (oneShotBytes == null) {
         throw new SignatureException("update() not called first");
@@ -321,15 +309,15 @@ public final class EdDSAEngine extends Signature {
   }
 
   /**
-   *  To efficiently sign all the data in one shot, if it is available,
-   *  use this method, which will avoid copying the data.
+   * To efficiently sign all the data in one shot, if it is available, use this method, which will
+   * avoid copying the data.
    *
    * Same as:
-   *<pre>
+   * <pre>
    *  setParameter(ONE_SHOT_MODE)
    *  update(data)
    *  sig = sign()
-   *</pre>
+   * </pre>
    *
    * @param data the message to be signed
    * @return the signature
@@ -341,15 +329,15 @@ public final class EdDSAEngine extends Signature {
   }
 
   /**
-   *  To efficiently sign all the data in one shot, if it is available,
-   *  use this method, which will avoid copying the data.
+   * To efficiently sign all the data in one shot, if it is available, use this method, which will
+   * avoid copying the data.
    *
    * Same as:
-   *<pre>
+   * <pre>
    *  setParameter(ONE_SHOT_MODE)
    *  update(data, off, len)
    *  sig = sign()
-   *</pre>
+   * </pre>
    *
    * @param data byte array containing the message to be signed
    * @param off the start of the message inside data
@@ -365,15 +353,15 @@ public final class EdDSAEngine extends Signature {
   }
 
   /**
-   *  To efficiently verify all the data in one shot, if it is available,
-   *  use this method, which will avoid copying the data.
+   * To efficiently verify all the data in one shot, if it is available, use this method, which will
+   * avoid copying the data.
    *
    * Same as:
-   *<pre>
+   * <pre>
    *  setParameter(ONE_SHOT_MODE)
    *  update(data)
    *  ok = verify(signature)
-   *</pre>
+   * </pre>
    *
    * @param data the message that was signed
    * @param signature of the message
@@ -386,15 +374,15 @@ public final class EdDSAEngine extends Signature {
   }
 
   /**
-   *  To efficiently verify all the data in one shot, if it is available,
-   *  use this method, which will avoid copying the data.
+   * To efficiently verify all the data in one shot, if it is available, use this method, which will
+   * avoid copying the data.
    *
    * Same as:
-   *<pre>
+   * <pre>
    *  setParameter(ONE_SHOT_MODE)
    *  update(data, off, len)
    *  ok = verify(signature)
-   *</pre>
+   * </pre>
    *
    * @param data byte array containing the message that was signed
    * @param off the start of the message inside data
@@ -410,15 +398,15 @@ public final class EdDSAEngine extends Signature {
   }
 
   /**
-   *  To efficiently verify all the data in one shot, if it is available,
-   *  use this method, which will avoid copying the data.
+   * To efficiently verify all the data in one shot, if it is available, use this method, which will
+   * avoid copying the data.
    *
    * Same as:
-   *<pre>
+   * <pre>
    *  setParameter(ONE_SHOT_MODE)
    *  update(data)
    *  ok = verify(signature, sigoff, siglen)
-   *</pre>
+   * </pre>
    *
    * @param data the message that was signed
    * @param signature byte array containing the signature
@@ -434,15 +422,15 @@ public final class EdDSAEngine extends Signature {
   }
 
   /**
-   *  To efficiently verify all the data in one shot, if it is available,
-   *  use this method, which will avoid copying the data.
+   * To efficiently verify all the data in one shot, if it is available, use this method, which will
+   * avoid copying the data.
    *
    * Same as:
-   *<pre>
+   * <pre>
    *  setParameter(ONE_SHOT_MODE)
    *  update(data, off, len)
    *  ok = verify(signature, sigoff, siglen)
-   *</pre>
+   * </pre>
    *
    * @param data byte array containing the message that was signed
    * @param off the start of the message inside data
@@ -462,7 +450,8 @@ public final class EdDSAEngine extends Signature {
   }
 
   /**
-   * @throws InvalidAlgorithmParameterException if spec is ONE_SHOT_MODE and update() already called
+   * @throws InvalidAlgorithmParameterException if spec is ONE_SHOT_MODE and update() already
+   * called
    * @see #ONE_SHOT_MODE
    */
   @Override
@@ -478,17 +467,13 @@ public final class EdDSAEngine extends Signature {
     }
   }
 
-  /**
-   * @deprecated
-   */
+  @Deprecated
   @Override
   protected void engineSetParameter(String param, Object value) {
     throw new UnsupportedOperationException("engineSetParameter unsupported");
   }
 
-  /**
-   * @deprecated
-   */
+  @Deprecated
   @Override
   protected Object engineGetParameter(String param) {
     throw new UnsupportedOperationException("engineSetParameter unsupported");

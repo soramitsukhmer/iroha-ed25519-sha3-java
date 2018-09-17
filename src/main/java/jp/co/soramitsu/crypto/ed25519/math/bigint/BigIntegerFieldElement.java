@@ -1,12 +1,3 @@
-/**
- * EdDSA-Java by str4d
- *
- * To the extent possible under law, the person who associated CC0 with EdDSA-Java has waived all
- * copyright and related or neighboring rights to EdDSA-Java.
- *
- * You should have received a copy of the CC0 legalcode along with this work. If not, see
- * <https://creativecommons.org/publicdomain/zero/1.0/>.
- */
 package jp.co.soramitsu.crypto.ed25519.math.bigint;
 
 import java.io.Serializable;
@@ -16,8 +7,8 @@ import jp.co.soramitsu.crypto.ed25519.math.FieldElement;
 
 /**
  * A particular element of the field \Z/(2^255-19).
- * @author str4d
  *
+ * @author str4d
  */
 public class BigIntegerFieldElement extends FieldElement implements Serializable {
 

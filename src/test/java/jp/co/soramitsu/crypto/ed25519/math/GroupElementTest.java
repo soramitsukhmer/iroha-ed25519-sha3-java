@@ -1,12 +1,3 @@
-/**
- * EdDSA-Java by str4d
- *
- * To the extent possible under law, the person who associated CC0 with EdDSA-Java has waived all
- * copyright and related or neighboring rights to EdDSA-Java.
- *
- * You should have received a copy of the CC0 legalcode along with this work. If not, see
- * <https://creativecommons.org/publicdomain/zero/1.0/>.
- */
 package jp.co.soramitsu.crypto.ed25519.math;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -204,8 +195,8 @@ public class GroupElementTest {
   }
 
   /**
-   * Tests {@link GroupElement#GroupElement(Curve, byte[])} and
-   * {@link GroupElement#toByteArray()} against valid public keys.
+   * Tests {@link GroupElement#GroupElement(Curve, byte[])} and {@link GroupElement#toByteArray()}
+   * against valid public keys.
    */
   @Test
   public void testToAndFromByteArray() {
@@ -797,8 +788,8 @@ public class GroupElementTest {
   // region scalar multiplication
 
   /**
-   * Test method for {@link GroupElement#scalarMultiply(byte[])}.
-   * Test values generated with Python Ed25519 implementation.
+   * Test method for {@link GroupElement#scalarMultiply(byte[])}. Test values generated with Python
+   * Ed25519 implementation.
    */
   @Test
   public void testScalarMultiplyByteArray() {

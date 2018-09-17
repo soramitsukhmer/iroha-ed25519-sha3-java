@@ -1,12 +1,3 @@
-/**
- * EdDSA-Java by str4d
- *
- * To the extent possible under law, the person who associated CC0 with EdDSA-Java has waived all
- * copyright and related or neighboring rights to EdDSA-Java.
- *
- * You should have received a copy of the CC0 legalcode along with this work. If not, see
- * <https://creativecommons.org/publicdomain/zero/1.0/>.
- */
 package jp.co.soramitsu.crypto.ed25519;
 
 import java.security.InvalidAlgorithmParameterException;
@@ -24,18 +15,16 @@ import jp.co.soramitsu.crypto.ed25519.spec.EdDSAPrivateKeySpec;
 import jp.co.soramitsu.crypto.ed25519.spec.EdDSAPublicKeySpec;
 
 /**
- *  Default keysize is 256 (Ed25519)
+ * Default keysize is 256 (Ed25519)
  */
 public final class KeyPairGenerator extends KeyPairGeneratorSpi {
 
   private static final int DEFAULT_KEYSIZE = 256;
-  private static final Hashtable<Integer, AlgorithmParameterSpec> edParameters;
+  private static final Hashtable<Integer, AlgorithmParameterSpec> edParameters = new Hashtable<Integer, AlgorithmParameterSpec>();
 
   static {
-    edParameters = new Hashtable<Integer, AlgorithmParameterSpec>();
-
     edParameters
-        .put(Integer.valueOf(256), new EdDSAGenParameterSpec(EdDSANamedCurveTable.ED_25519));
+        .put(DEFAULT_KEYSIZE, new EdDSAGenParameterSpec(EdDSANamedCurveTable.ED_25519));
   }
 
   private EdDSAParameterSpec edParams;
@@ -43,10 +32,11 @@ public final class KeyPairGenerator extends KeyPairGeneratorSpi {
   private boolean initialized;
 
   public void initialize(int keysize, SecureRandom random) {
-    AlgorithmParameterSpec edParams = edParameters.get(Integer.valueOf(keysize));
+    AlgorithmParameterSpec edParams = edParameters.get(keysize);
     if (edParams == null) {
       throw new InvalidParameterException("unknown key type.");
     }
+
     try {
       initialize(edParams, random);
     } catch (InvalidAlgorithmParameterException e) {
@@ -84,8 +74,9 @@ public final class KeyPairGenerator extends KeyPairGeneratorSpi {
   }
 
   /**
-   * Create an EdDSANamedCurveSpec from the provided curve name. The current
-   * implementation fetches the pre-created curve spec from a table.
+   * Create an EdDSANamedCurveSpec from the provided curve name. The current implementation fetches
+   * the pre-created curve spec from a table.
+   *
    * @param curveName the EdDSA named curve.
    * @return the specification for the named curve.
    * @throws InvalidAlgorithmParameterException if the named curve is unknown.

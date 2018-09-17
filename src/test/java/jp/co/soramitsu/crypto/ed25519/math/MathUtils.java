@@ -1,12 +1,3 @@
-/**
- * EdDSA-Java by str4d
- *
- * To the extent possible under law, the person who associated CC0 with EdDSA-Java has waived all
- * copyright and related or neighboring rights to EdDSA-Java.
- *
- * You should have received a copy of the CC0 legalcode along with this work. If not, see
- * <https://creativecommons.org/publicdomain/zero/1.0/>.
- */
 package jp.co.soramitsu.crypto.ed25519.math;
 
 import java.math.BigInteger;
@@ -254,8 +245,8 @@ public class MathUtils {
   }
 
   /**
-   * Converts a group element from one representation to another.
-   * This method is a helper used to test various methods in GroupElement.
+   * Converts a group element from one representation to another. This method is a helper used to
+   * test various methods in GroupElement.
    *
    * @param g The group element.
    * @param repr The desired representation.
@@ -343,9 +334,9 @@ public class MathUtils {
   }
 
   /**
-   * Adds two group elements and returns the result in P3 representation.
-   * It uses BigInteger arithmetic and the affine representation.
-   * This method is a helper used to test the projective group addition formulas in GroupElement.
+   * Adds two group elements and returns the result in P3 representation. It uses BigInteger
+   * arithmetic and the affine representation. This method is a helper used to test the projective
+   * group addition formulas in GroupElement.
    *
    * @param g1 The first group element.
    * @param g2 The second group element.
@@ -393,9 +384,9 @@ public class MathUtils {
   }
 
   /**
-   * Doubles a group element and returns the result in P3 representation.
-   * It uses BigInteger arithmetic and the affine representation.
-   * This method is a helper used to test the projective group doubling formula in GroupElement.
+   * Doubles a group element and returns the result in P3 representation. It uses BigInteger
+   * arithmetic and the affine representation. This method is a helper used to test the projective
+   * group doubling formula in GroupElement.
    *
    * @param g The group element.
    * @return g+g.

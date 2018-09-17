@@ -1,12 +1,3 @@
-/**
- * EdDSA-Java by str4d
- *
- * To the extent possible under law, the person who associated CC0 with EdDSA-Java has waived all
- * copyright and related or neighboring rights to EdDSA-Java.
- *
- * You should have received a copy of the CC0 legalcode along with this work. If not, see
- * <https://creativecommons.org/publicdomain/zero/1.0/>.
- */
 package jp.co.soramitsu.crypto.ed25519;
 
 import static org.hamcrest.Matchers.is;
@@ -17,9 +8,6 @@ import javax.xml.bind.DatatypeConverter;
 import org.hamcrest.core.IsEqual;
 import org.junit.Test;
 
-/**
- * @author str4d additional test by the NEM project team.
- */
 public class UtilsTest {
 
   private static final String hex1 = "3B6A27BCCEB6A42D62A3A8D02A6F0D73653215771DE243A63AC048A18B59DA29";

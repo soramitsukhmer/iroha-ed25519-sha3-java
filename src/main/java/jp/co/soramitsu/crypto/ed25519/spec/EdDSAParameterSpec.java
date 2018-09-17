@@ -1,12 +1,3 @@
-/**
- * EdDSA-Java by str4d
- *
- * To the extent possible under law, the person who associated CC0 with EdDSA-Java has waived all
- * copyright and related or neighboring rights to EdDSA-Java.
- *
- * You should have received a copy of the CC0 legalcode along with this work. If not, see
- * <https://creativecommons.org/publicdomain/zero/1.0/>.
- */
 package jp.co.soramitsu.crypto.ed25519.spec;
 
 import java.io.Serializable;
@@ -21,8 +12,8 @@ import org.spongycastle.jce.provider.BouncyCastleProvider;
 
 /**
  * Parameter specification for an EdDSA algorithm.
- * @author str4d
  *
+ * @author str4d
  */
 public class EdDSAParameterSpec implements AlgorithmParameterSpec, Serializable {
 
@@ -75,7 +66,7 @@ public class EdDSAParameterSpec implements AlgorithmParameterSpec, Serializable 
   }
 
   /**
-   *  @return the base (generator)
+   * @return the base (generator)
    */
   public GroupElement getB() {
     return B;

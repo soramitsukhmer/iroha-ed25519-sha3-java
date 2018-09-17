@@ -1,12 +1,3 @@
-/**
- * EdDSA-Java by str4d
- *
- * To the extent possible under law, the person who associated CC0 with EdDSA-Java has waived all
- * copyright and related or neighboring rights to EdDSA-Java.
- *
- * You should have received a copy of the CC0 legalcode along with this work. If not, see
- * <https://creativecommons.org/publicdomain/zero/1.0/>.
- */
 package jp.co.soramitsu.crypto.ed25519.spec;
 
 import java.security.MessageDigest;
@@ -17,7 +8,6 @@ import jp.co.soramitsu.crypto.ed25519.math.GroupElement;
 
 /**
  * @author str4d
- *
  */
 public class EdDSAPrivateKeySpec implements KeySpec {
 
@@ -28,9 +18,9 @@ public class EdDSAPrivateKeySpec implements KeySpec {
   private final EdDSAParameterSpec spec;
 
   /**
-   *  @param seed the private key
-   *  @param spec the parameter specification for this key
-   *  @throws IllegalArgumentException if seed length is wrong or hash algorithm is unsupported
+   * @param seed the private key
+   * @param spec the parameter specification for this key
+   * @throws IllegalArgumentException if seed length is wrong or hash algorithm is unsupported
    */
   public EdDSAPrivateKeySpec(byte[] seed, EdDSAParameterSpec spec) {
     if (seed.length != spec.getCurve().getField().getb() / 8) {
@@ -65,13 +55,12 @@ public class EdDSAPrivateKeySpec implements KeySpec {
   }
 
   /**
-   *  Initialize directly from the hash.
-   *  getSeed() will return null if this constructor is used.
+   * Initialize directly from the hash. getSeed() will return null if this constructor is used.
    *
-   *  @param spec the parameter specification for this key
-   *  @param h the private key
-   *  @throws IllegalArgumentException if hash length is wrong
-   *  @since 0.1.1
+   * @param spec the parameter specification for this key
+   * @param h the private key
+   * @throws IllegalArgumentException if hash length is wrong
+   * @since 0.1.1
    */
   public EdDSAPrivateKeySpec(EdDSAParameterSpec spec, byte[] h) {
     if (h.length != spec.getCurve().getField().getb() / 4) {
@@ -101,28 +90,28 @@ public class EdDSAPrivateKeySpec implements KeySpec {
   }
 
   /**
-   *  @return will be null if constructed directly from the private key
+   * @return will be null if constructed directly from the private key
    */
   public byte[] getSeed() {
     return seed;
   }
 
   /**
-   *  @return the hash
+   * @return the hash
    */
   public byte[] getH() {
     return h;
   }
 
   /**
-   *  @return the private key
+   * @return the private key
    */
   public byte[] geta() {
     return a;
   }
 
   /**
-   *  @return the public key
+   * @return the public key
    */
   public GroupElement getA() {
     return A;

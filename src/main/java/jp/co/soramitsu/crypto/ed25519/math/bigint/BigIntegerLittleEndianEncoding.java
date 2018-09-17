@@ -1,12 +1,3 @@
-/**
- * EdDSA-Java by str4d
- *
- * To the extent possible under law, the person who associated CC0 with EdDSA-Java has waived all
- * copyright and related or neighboring rights to EdDSA-Java.
- *
- * You should have received a copy of the CC0 legalcode along with this work. If not, see
- * <https://creativecommons.org/publicdomain/zero/1.0/>.
- */
 package jp.co.soramitsu.crypto.ed25519.math.bigint;
 
 import java.io.Serializable;
@@ -34,12 +25,11 @@ public class BigIntegerLittleEndianEncoding extends Encoding implements Serializ
   }
 
   /**
-   *  Convert $x$ to little endian.
-   *  Constant time.
+   * Convert $x$ to little endian. Constant time.
    *
-   *  @param x the BigInteger value to encode
-   *  @return array of length $b/8$
-   *  @throws IllegalStateException if field not set
+   * @param x the BigInteger value to encode
+   * @return array of length $b/8$
+   * @throws IllegalStateException if field not set
    */
   public byte[] encode(BigInteger x) {
     if (f == null) {
@@ -57,13 +47,12 @@ public class BigIntegerLittleEndianEncoding extends Encoding implements Serializ
   }
 
   /**
-   *  Decode a FieldElement from its $(b-1)$-bit encoding.
-   *  The highest bit is masked out.
+   * Decode a FieldElement from its $(b-1)$-bit encoding. The highest bit is masked out.
    *
-   *  @param in the $(b-1)$-bit encoding of a FieldElement.
-   *  @return the FieldElement represented by 'val'.
-   *  @throws IllegalStateException if field not set
-   *  @throws IllegalArgumentException if encoding is invalid
+   * @param in the $(b-1)$-bit encoding of a FieldElement.
+   * @return the FieldElement represented by 'val'.
+   * @throws IllegalStateException if field not set
+   * @throws IllegalArgumentException if encoding is invalid
    */
   public FieldElement decode(byte[] in) {
     if (f == null) {
@@ -76,10 +65,10 @@ public class BigIntegerLittleEndianEncoding extends Encoding implements Serializ
   }
 
   /**
-   *  Convert in to big endian
+   * Convert in to big endian
    *
-   *  @param in the $(b-1)$-bit encoding of a FieldElement.
-   *  @return the decoded value as a BigInteger
+   * @param in the $(b-1)$-bit encoding of a FieldElement.
+   * @return the decoded value as a BigInteger
    */
   public BigInteger toBigInteger(byte[] in) {
     byte[] out = new byte[in.length];
@@ -90,11 +79,11 @@ public class BigIntegerLittleEndianEncoding extends Encoding implements Serializ
   }
 
   /**
-   * From the Ed25519 paper:<br>
-   * $x$ is negative if the $(b-1)$-bit encoding of $x$ is lexicographically larger
-   * than the $(b-1)$-bit encoding of $-x$. If $q$ is an odd prime and the encoding
-   * is the little-endian representation of $\{0, 1,\dots, q-1\}$ then the negative
+   * From the Ed25519 paper:<br> $x$ is negative if the $(b-1)$-bit encoding of $x$ is
+   * lexicographically larger than the $(b-1)$-bit encoding of $-x$. If $q$ is an odd prime and the
+   * encoding is the little-endian representation of $\{0, 1,\dots, q-1\}$ then the negative
    * elements of $F_q$ are $\{1, 3, 5,\dots, q-2\}$.
+   *
    * @return true if negative
    */
   public boolean isNegative(FieldElement x) {

@@ -1,25 +1,13 @@
-/**
- * EdDSA-Java by str4d
- *
- * To the extent possible under law, the person who associated CC0 with EdDSA-Java has waived all
- * copyright and related or neighboring rights to EdDSA-Java.
- *
- * You should have received a copy of the CC0 legalcode along with this work. If not, see
- * <https://creativecommons.org/publicdomain/zero/1.0/>.
- */
 package jp.co.soramitsu.crypto.ed25519;
 
-/**
- * Basic utilities for EdDSA.
- * Not for external use, not maintained as a public API.
- *
- * @author str4d
- *
- */
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
 public class Utils {
 
   /**
    * Constant-time byte comparison.
+   *
    * @param b a byte
    * @param c a byte
    * @return 1 if b and c are equal, 0 otherwise.
@@ -35,6 +23,7 @@ public class Utils {
 
   /**
    * Constant-time byte[] comparison.
+   *
    * @param b a byte[]
    * @param c a byte[]
    * @return 1 if b and c are equal, 0 otherwise.
@@ -50,6 +39,7 @@ public class Utils {
 
   /**
    * Constant-time determine if byte is negative.
+   *
    * @param b the byte to check.
    * @return 1 if the byte is negative, 0 otherwise.
    */
@@ -59,6 +49,7 @@ public class Utils {
 
   /**
    * Get the i'th bit of a byte array.
+   *
    * @param h the byte array.
    * @param i the bit index.
    * @return 0 or 1, the value of the i'th bit in h
