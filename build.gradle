@@ -18,7 +18,7 @@ repositories {
     mavenCentral()
 }
 
-final def lombokVersion = '1.18.6'
+final def lombokVersion = '1.18.8'
 
 dependencies {
     compile group: 'com.madgag.spongycastle', name: 'core', version: '1.58.0.0'
