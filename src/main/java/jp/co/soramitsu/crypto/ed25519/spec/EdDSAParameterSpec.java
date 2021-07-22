@@ -8,7 +8,7 @@ import java.security.spec.AlgorithmParameterSpec;
 import jp.co.soramitsu.crypto.ed25519.math.Curve;
 import jp.co.soramitsu.crypto.ed25519.math.GroupElement;
 import jp.co.soramitsu.crypto.ed25519.math.ScalarOps;
-import org.spongycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 /**
  * Parameter specification for an EdDSA algorithm.
